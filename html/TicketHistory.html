@@ -7,17 +7,35 @@
 
 
 <form action= # method="post">
-	<input type="radio" id="client" name="type" value="Client">
-  	<label for="client">Client</label><br>
-  	<input type="radio" id="employee" name="type" value="Employee">
-  	<label for="employee">Employee</label><br>
- 	<input type="radio" id="device" name="type" value="Device">
-  	<label for="device">Device</label>
+	<label for="ticketNum">Ticket Number:</label><br>
+        <input type="text" id="ticketNum" name="ticketNum"><br><br>
 
-<label for="fname">ID:</label><br>
-<input type="text" id="idno" name="idno"><br>
+	<label for="deviceType">Device Type:</label><br>
+        <input type="text" id="deviceType" name="deviceType"><br><br>
+
+	<label for="serialNum">Device Serial Number:</label><br>
+        <input type="text" id="serialNum" name="serialNum"><br><br>
+
+        <label for="clientID">Client ID:</label><br>
+        <input type="text" id="clientID" name="clientID" ><br><br>
+
+	<label for="status">Status:</label><br>
+        <select id="status" name="status">
+            <option value="Open">Open</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Closed">Closed</option>
+        </select><br><br>
+
 
 <input type="submit" value="Search">
+</form>
+
+<h1>Start New</h1>
+<form action= # method="post">
+	<label for="ticketNum">Ticket Number:</label><br>
+        <input type="text" id="ticketNum" name="ticketNum" required><br><br>
+<input type="submit" value="Claim">
+#should set employee id to the users and status to inprogress	
 
 </form>
 </body>
