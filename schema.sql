@@ -1,33 +1,30 @@
 CREATE DATABASE IF NOT EXISTS Company;
 USE Company;
 
--- Client Table
 CREATE TABLE IF NOT EXISTS Client (
     ClientID INT NOT NULL,
     LocationName VARCHAR(15) NOT NULL,
     CONSTRAINT ClientIDPK PRIMARY KEY (ClientID)
 );
 
--- Employee Table
 CREATE TABLE IF NOT EXISTS Employee (
     EmployeeID INT NOT NULL,
     Name VARCHAR(30) NOT NULL,
     CONSTRAINT EmpIDPK PRIMARY KEY (EmployeeID)
 );
 
--- Ticket Table
 CREATE TABLE IF NOT EXISTS Ticket (
     TicketNum INT NOT NULL,
     EmployeeID INT NOT NULL,
     SerialNum INT NOT NULL,
     ClientID INT NOT NULL,
+    DeviceType VARCHAR(15) NOT NULL,
     Status VARCHAR(15) NOT NULL,
     CONSTRAINT TicketNumPK PRIMARY KEY (TicketNum),
     CONSTRAINT TicketEmpFK FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),
     CONSTRAINT TicketClientFK FOREIGN KEY (ClientID) REFERENCES Client(ClientID)
 );
 
--- Device Table
 CREATE TABLE IF NOT EXISTS Device (
     SerialNum INT NOT NULL,
     ClientID INT NOT NULL,
