@@ -1,0 +1,41 @@
+CREATE DATABASE IF NOT EXISTS Company;
+USE Company;
+
+-- Client Table
+CREATE TABLE IF NOT EXISTS Client (
+    ClientID INT NOT NULL,
+    LocationName VARCHAR(15) NOT NULL,
+    CONSTRAINT ClientIDPK PRIMARY KEY (ClientID)
+);
+
+-- Employee Table
+CREATE TABLE IF NOT EXISTS Employee (
+    EmployeeID INT NOT NULL,
+    Name VARCHAR(30) NOT NULL,
+    CONSTRAINT EmpIDPK PRIMARY KEY (EmployeeID)
+);
+
+-- Device Table
+CREATE TABLE IF NOT EXISTS Device (
+    SerialNum INT NOT NULL,
+    ClientID INT NOT NULL,
+    LastWorkedOn DATE,
+    PurchasedDate DATE,
+    TicketNum INT,
+    CONSTRAINT DevicePK PRIMARY KEY (SerialNum),
+    CONSTRAINT DeviceClientFK FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
+    CONSTRAINT DeviceTicketFK FOREIGN KEY (TicketNum) REFERENCES Ticket(TicketNum) ON DELETE SET NULL
+);
+
+-- Ticket Table
+CREATE TABLE IF NOT EXISTS Ticket (
+    TicketNum INT NOT NULL,
+    EmployeeID INT NOT NULL,
+    SerialNum INT NOT NULL,
+    ClientID INT NOT NULL,
+    Status VARCHAR(15) NOT NULL,
+    CONSTRAINT TicketNumPK PRIMARY KEY (TicketNum),
+    CONSTRAINT TicketEmpFK FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),
+    CONSTRAINT TicketClientFK FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
+    CONSTRAINT TicketDeviceFK FOREIGN KEY (SerialNum) REFERENCES Device(SerialNum)
+);
