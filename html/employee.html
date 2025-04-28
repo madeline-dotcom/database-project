@@ -1,12 +1,15 @@
+<?php
+session_start();
+$name = $SESSION['name'] ?? 'User';
+?>
 <!DOCTYPE html>
 <html>
 <head>
 
-<title>Employee</title>
+<title>Employee Dashboard</title>
 </head>
 <body>
-#can we make it say employees name
-<h1>Welcome Employee</h1>
+<h1>Welcome <?php echo htmlspecialchars($name); ?></h1>
 <button onclick="document.location='TicketHistory.html'">Ticket History</button>
 <button onclick="document.location='myTickets.html'">My Tickets</button>
 <button onclick="document.location='DeviceMng.html'">Devices</button>
