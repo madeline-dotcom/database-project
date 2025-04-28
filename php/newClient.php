@@ -1,5 +1,5 @@
 <?php
-include 'db_config.php'; // Connect to database
+include 'db_config.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $clientID = $_POST['clientID'];
