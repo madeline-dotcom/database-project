@@ -1,3 +1,7 @@
+<?php  
+session_start();
+$employeeID = $_SESSION['employee'] ?? '';
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,7 +13,7 @@
 #can we auto do this
  <form action="#" method="post">
         <label for="employeeID">EmployeeID:</label><br>
-        <input type="text" id="employeeID" name="employeeID" required><br><br>
+        <input type="text" id="employeeID" name="employeeID" value="<?php echo htmlspecialchars($employeeID); ?>" readonly><br>
 <input type="submit" value="Search">
 </form>
 <h2>Close Ticket<h2>
