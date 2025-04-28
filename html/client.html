@@ -1,13 +1,14 @@
 <?php
 session_start();
-$client_name = $_SESSION['client_name'] ?? 'Client' # default setback
+$client_name = $_SESSION['client_name'] ?? 'Client';
 ?>
 <!DOCTYPE html>
 <html>
-<head>
-<title>Client Dashboard</title>
+<head>      
+    <title>Client Dashboard</title>
 </head>
 <body>
+    
 #can we make it say clients name
 <h1>Welcome <?php echo htmlspecialchars($client_name); ?></h1>
 
