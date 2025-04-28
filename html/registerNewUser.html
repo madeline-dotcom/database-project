@@ -3,15 +3,20 @@
 <head><title>Register New User</title></head>
 <body>
 <h2>Register</h2>
-<form action="register_user.php" method="post">
-    Username: <input type="text" name="username" required><br><br>
-    Password: <input type="password" name="password" required><br><br>
-    User Type:
-    <select name="user_type" required>
+<form action="../php/register_user.php" method="post">
+    <label for="username">Username:</label><br>
+    <input type="text" id="username" name="username" required><br><br>
+
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password" required><br><br>
+
+    <label for="usertype">User Type:</label><br>
+    <select id="usertype" name="usertype" required>
         <option value="client">Client</option>
         <option value="employee">Employee</option>
         <option value="admin">Admin</option>
     </select><br><br>
+
     <input type="submit" value="Register">
 </form>
 </body>
