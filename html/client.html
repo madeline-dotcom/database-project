@@ -1,11 +1,16 @@
+<?php
+session_start();
+$client_name = $_SESSION['client_name'] ?? 'Clien' # default setback
+?>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Client</title>
+<title>Client Dashboard</title>
 </head>
 <body>
 #can we make it say clients name
-<h1>Welcome Client</h1>
+<h1>Welcome <?php echo htmlspecialchars($client_name); ?></h1>
+
 <button onclick="document.location='TicketSubmission.html'">Ticket Submission</button>
 <button onclick="document.location='Login.html'">Log Out</button>
 
