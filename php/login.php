@@ -4,41 +4,49 @@ include 'db_config.php';
 session_start(); 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
+    // Sanitize and retrieve input
+    $username = trim($_POST['username']);
     $password = $_POST['password'];
 
+    // Prepare SQL statement
     $stmt = $conn->prepare("SELECT UserID, Username, Password, UserType FROM Users WHERE Username = ?");
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
+    if ($stmt) {
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
 
-    $result = $stmt->get_result();x
+        // Fetch result
+        $result = $stmt->get_result();
+        if ($result && $result->num_rows === 1) {
+            $row = $result->fetch_assoc();
 
-    if ($result->num_rows == 1) {
-        $row = $result->fetch_assoc();
-        
-        if ($password === $row['Password']) {
-            $_SESSION['username'] = $row['Username'];
-            $_SESSION['usertype'] = $row['UserType'];
+            // Verify password
+            if ($password === $row['Password']) {
+                $_SESSION['username'] = $row['Username'];
+                $_SESSION['usertype'] = $row['UserType'];
 
-            echo "Login successful!<br>";
-
-            if ($row['UserType'] == 'admin') {
-                header("Location: admin_dashboard.php");
-            } elseif ($row['UserType'] == 'employee') {
-                header("Location: employee_dashboard.php");
+                // Redirect based on user type
+                switch ($row['UserType']) {
+                    case 'admin':
+                        header("Location: admin_dashboard.php");
+                        break;
+                    case 'employee':
+                        header("Location: employee_dashboard.php");
+                        break;
+                    default:
+                        header("Location: client_dashboard.php");
+                        break;
+                }
+                exit();
             } else {
-                header("Location: client_dashboard.php");
+                echo "Invalid password.";
             }
-            exit();
         } else {
-            echo "Invalid password.";
+            echo "No such user found.";
         }
+        $stmt->close();
     } else {
-        echo "No such user found.";
+        echo "Database query failed.";
     }
-
-    $stmt->close();
+    $conn->close();
 }
-
-$conn->close();
 ?>

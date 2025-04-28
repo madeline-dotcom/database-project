@@ -11,14 +11,22 @@ $conn = new mysqli('localhost','root','pswd','DB name');
 if ($conn->connect_error){
 	die('Connection Failed : '.$conn->connect_error);
 }
-else{
-	$stmt = $conn->prepare("insert into Ticket(ticketNum, employeeID, deviceType, serialNum, clientID)
-		values(?????)")
-	$stmt-> bind_param("iissi",$ticketNum,$employeeID,$deviceType,$serialNum,$clientID);
-	$stmt->execute();
-	echo "success";
-	$stmt->close();
-	$conn->close();
+
+$stmt = $conn->prepare("INSERT INTO Ticket (ticketNum, employeeID, deviceType, serialNum, clientID) VALUES (?, ?, ?, ?, ?)");
+
+if($stmt ==false){
+	die('Prepare failed: ' . $conn->error);
 }
 
+$stmt->bind_param("iisss", $ticketNum, $employeeID, $deviceType, $serialNum, $clientID);
+
+if ($stmt->execute()) {
+    echo "Success";
+} else {
+    echo "Execution failed: " . $stmt->error;
+}
+
+// Close statement and connection
+$stmt->close();
+$conn->close();
 ?>
