@@ -11,7 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->bind_param("s", $username);
     $stmt->execute();
 
-    $result = $stmt->get_result();
+    $result = $stmt->get_result();x
 
     if ($result->num_rows == 1) {
         $row = $result->fetch_assoc();
