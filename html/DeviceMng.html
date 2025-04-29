@@ -1,37 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Device Managment</title>
+<title>Device Management</title>
 </head>
 <body>
-<h2> View Devices</h2>
-<form action="#" method="post">
-        <label for="serial">Serial Num:</label><br>
-        <input type="text" id="serial" name="serial" ><br><br>
+<h2>View Devices</h2>
+<form action="../php/viewDevice.php" method="post">
+    <label for="serial">Serial Num:</label><br>
+    <input type="text" id="serial" name="serial"><br><br>
 
-        <label for="clientID">Client ID:</label><br>
-        <input type="text" id="clientID" name="clientID" ><br><br>
-        
-	
-	<label for="date">Purchase Date:</label><br>
-        <input type="text" id="date" name="date" ><br><br>
-        
-	
-	<label for="type">Device Type:</label><br>
-        <select id="type" name="type">
-	<option value="any">Any</option>
-            <option value="computer">Computer</option>
-            <option value="printer">Printer</option>
-            <option value="server">Server</option>
-        </select><br><br>
-	
-	<input type="checkbox" id="notRecent" name="notRecent" value="notRecent">
-		<label for="vehicle1"> Not Worked on Recently</label><br>
-	
-#if the device has not been worked on in the past month
+    <label for="clientID">Client ID:</label><br>
+    <input type="text" id="clientID" name="clientID"><br><br>
 
-        <input type="submit" value="Search">
-    </form>
+    <label for="date">Purchase Date:</label><br>
+    <input type="text" id="purchasedDate" name="purchasedDate" placeholder="YYYY-MM-DD"><br><br>
+
+    <input type="checkbox" id="notRecent" name="notRecent" value="1">
+    <label for="notRecent">Not Worked on Recently (Past Month)</label><br><br>
+
+    <input type="submit" value="Search">
+</form>
 <br><br>
 
 <h2>New Device</h2>
@@ -45,7 +33,7 @@
         
 	
 	<label for="date">Purchase Date:</label><br>
-        <input type="text" id="date" name="date" required><br><br>
+        <input type="text" id="date" name="date" placeholder="YYYY-MM-DD"><br><br>
         
 	
 	<label for="type">Device Type:</label><br>
