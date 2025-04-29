@@ -1,5 +1,5 @@
-1001,101,9876,123,Laptop,Open
-1002,102,5432,456,Printer,In Progress
-1003,103,1202,135,Tablet,Closed
-1004,104,1728,246,Desktop,Open
-1005,105,2004,236,Monitor,Closed
+1001,101,9876,123,laptop,Open
+1002,102,5432,456,printer,In Progress
+1003,103,1202,135,tablet,Closed
+1004,104,1728,246,desktop,Open
+1005,105,2004,236,monitor,Closed

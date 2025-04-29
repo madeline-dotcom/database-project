@@ -35,3 +35,10 @@ CREATE TABLE IF NOT EXISTS Device (
     CONSTRAINT DeviceClientFK FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
     CONSTRAINT DeviceTicketFK FOREIGN KEY (TicketNum) REFERENCES Ticket(TicketNum) ON DELETE SET NULL
 );
+
+CREATE TABLE IF NOT EXISTS Users(
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR(50) UNIQUE NOT NULL,
+    Password VARCHAR(255) NOT NULL,
+    UserType ENUM('client', 'employee', 'admin') NOT NULL
+);

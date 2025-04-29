@@ -23,3 +23,9 @@ INTO TABLE Device
 FIELDS TERMINATED BY ',' 
 LINES TERMINATED BY '\n'
 (SerialNum, ClientID, LastWorkedOn, PurchasedDate, TicketNum);
+
+LOAD DATA LOCAL INFILE './data/Users.dat'
+INTO TABLE Users
+FIELDS TERMINATED BY ',' 
+LINES TERMINATED BY '\n'
+(UserID, Username, Password, UserType);
