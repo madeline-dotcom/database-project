@@ -1,5 +1,5 @@
 <?php
-include 'db_config.php'; 
+include 'template.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve the client ID from the submitted form data
