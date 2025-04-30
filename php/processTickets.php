@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'template.php'; // Includes the database connection
+include 'template.php';// Includes the database connection
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employeeID'])) {
     $employeeID = $_POST['employeeID'];
