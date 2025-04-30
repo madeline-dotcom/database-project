@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS Employee (
 
 CREATE TABLE IF NOT EXISTS Ticket (
     TicketNum INT NOT NULL,
-    EmployeeID INT NOT NULL,
+    EmployeeID INT,
     SerialNum INT NOT NULL,
     ClientID INT NOT NULL,
     DeviceType ENUM('Computer', 'Printer', 'Server') NOT NULL,
