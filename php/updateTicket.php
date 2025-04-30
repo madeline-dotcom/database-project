@@ -5,12 +5,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ticketNum = $_POST['ticketNum'];
     $newStatus = $_POST['newStatus'];
 
-    // Validate input
+    // Validate the input
     if (empty($ticketNum) || empty($newStatus)) {
         die("Ticket Number and New Status are required.");
     }
 
-    // Ensure the new status is valid
+    // Ensure that the new status is valid
     $validStatuses = ['Open', 'In Progress', 'Closed'];
     if (!in_array($newStatus, $validStatuses)) {
         die("Invalid status: $newStatus");
