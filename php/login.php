@@ -21,7 +21,7 @@ foreach ($lines as $line) {
         // Redirect based on UserType
         switch (strtolower($userType)) {
             case 'admin':
-                header("Location: http://localhost:8000/html/admin.html");
+                header("Location: http://localhost:8000/html/adminPage.html");
                 break;
             case 'client':
                 header("Location: http://localhost:8000/html/client.html");

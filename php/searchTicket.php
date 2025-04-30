@@ -59,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $stmt->execute();
     $result = $stmt->get_result();
 
+
     // Display the results
     echo "<h2>Ticket Search Result</h2>";
 
@@ -74,6 +75,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
               </tr>";
 
         while ($row = $result->fetch_assoc()) {
+            // Check if employeeID is null and set it to N/A
+            if (is_null($row['EmployeeID'])) {
+                $row['EmployeeID'] = "N/A";
+            }
             echo "<tr>";
             echo "<td>" . htmlspecialchars($row['TicketNum']) . "</td>";
             echo "<td>" . htmlspecialchars($row['EmployeeID']) . "</td>";
