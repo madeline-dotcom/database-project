@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS Ticket (
     DeviceType ENUM('Computer', 'Printer', 'Server') NOT NULL,
     Status ENUM('Open', 'In Progress', 'Closed') NOT NULL,
     CONSTRAINT TicketNumPK PRIMARY KEY (TicketNum),
-    CONSTRAINT TicketEmpFK FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),
-    CONSTRAINT TicketClientFK FOREIGN KEY (ClientID) REFERENCES Client(ClientID)
+    CONSTRAINT TicketEmpFK FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID) ON DELETE SET NULL,
+    CONSTRAINT TicketClientFK FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Device (
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS Device (
     PurchasedDate DATE,
     TicketNum INT,
     CONSTRAINT DevicePK PRIMARY KEY (SerialNum),
-    CONSTRAINT DeviceClientFK FOREIGN KEY (ClientID) REFERENCES Client(ClientID),
+    CONSTRAINT DeviceClientFK FOREIGN KEY (ClientID) REFERENCES Client(ClientID) ON DELETE CASCADE,
     CONSTRAINT DeviceTicketFK FOREIGN KEY (TicketNum) REFERENCES Ticket(TicketNum) ON DELETE SET NULL
 );
 
