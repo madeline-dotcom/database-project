@@ -1,5 +1,5 @@
 <?php
-include 'db_config.php';
+include 'template.php';
 
 session_start(); 
 
@@ -26,14 +26,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                 // Redirect based on user type
                 switch ($row['UserType']) {
-                    case 'admin':
-                        header("Location: admin_dashboard.php");
+                    case 'Admin':
+                        header("Location: ../html/adminPage.html");
                         break;
-                    case 'employee':
-                        header("Location: employee_dashboard.php");
+                    case 'Employee':
+                        header("Location: ../html/employee.html");
                         break;
                     default:
-                        header("Location: client_dashboard.php");
+                        header("Location: ../html/client.html");
                         break;
                 }
                 exit();
