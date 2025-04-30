@@ -2,14 +2,14 @@ CREATE DATABASE IF NOT EXISTS Company;
 USE Company;
 
 CREATE TABLE IF NOT EXISTS Client (
-    ClientID INT NOT NULL,
+    ClientID INT UNIQUE NOT NULL,
     Name VARCHAR(15) NOT NULL,
     Location VARCHAR(30) NOT NULL,
     CONSTRAINT ClientIDPK PRIMARY KEY (ClientID)
 );
 
 CREATE TABLE IF NOT EXISTS Employee (
-    EmployeeID INT NOT NULL,
+    EmployeeID INT UNIQUE NOT NULL,
     Name VARCHAR(30) NOT NULL,
     CONSTRAINT EmpIDPK PRIMARY KEY (EmployeeID)
 );
@@ -39,8 +39,42 @@ CREATE TABLE IF NOT EXISTS Device (
 );
 
 CREATE TABLE IF NOT EXISTS Users (
-    UserID INT NOT NULL PRIMARY KEY,
-    Username VARCHAR(50) UNIQUE NOT NULL,
+    Username VARCHAR(50) UNIQUE NOT NULL PRIMARY KEY,
     Password VARCHAR(255) NOT NULL,
+    UserID INT NOT NULL,
     UserType ENUM('Client', 'Employee', 'Admin') NOT NULL
 );
+
+DELIMITER $$
+
+CREATE TRIGGER CheckUserIDBeforeInsert
+BEFORE INSERT ON Users
+FOR EACH ROW
+BEGIN
+    IF NEW.UserType = 'Client' THEN
+        IF NOT EXISTS (SELECT 1 FROM Client WHERE ClientID = NEW.UserID) THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid ClientID for UserType Client';
+        END IF;
+    ELSEIF NEW.UserType = 'Employee' THEN
+        IF NOT EXISTS (SELECT 1 FROM Employee WHERE EmployeeID = NEW.UserID) THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid EmployeeID for UserType Employee';
+        END IF;
+    END IF;
+END$$
+
+CREATE TRIGGER CheckUserIDBeforeUpdate
+BEFORE UPDATE ON Users
+FOR EACH ROW
+BEGIN
+    IF NEW.UserType = 'Client' THEN
+        IF NOT EXISTS (SELECT 1 FROM Client WHERE ClientID = NEW.UserID) THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid ClientID for UserType Client';
+        END IF;
+    ELSEIF NEW.UserType = 'Employee' THEN
+        IF NOT EXISTS (SELECT 1 FROM Employee WHERE EmployeeID = NEW.UserID) THEN
+            SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Invalid EmployeeID for UserType Employee';
+        END IF;
+    END IF;
+END$$
+
+DELIMITER ;

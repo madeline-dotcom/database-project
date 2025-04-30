@@ -1,23 +1,27 @@
 <?php
-// Path to User.dat
-$userFile = "../data/Users.dat"; // Make sure this path is correct
+include 'template.php';
+session_start();
 
 // Get form input
 $username = trim($_POST['username'] ?? '');
 $password = trim($_POST['password'] ?? '');
 
-// Read file lines
-$lines = file($userFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-
-$authenticated = false;
-
-foreach ($lines as $line) {
-    // Split and trim each field
-    list($userID, $fileUsername, $filePassword, $userType) = array_map('trim', explode(',', $line));
-
-    if ($username === $fileUsername && $password === $filePassword) {
-        $authenticated = true;
-
+// Validate input
+if (empty($username) || empty($password)) {
+    echo "<h2>Username and password are required</h2>";
+    echo "<a href='../html/login.html'>Try again</a>";
+    exit();
+}
+//Perform a select query on users to see if a user with the username and password exists
+$stmt = $conn->prepare("SELECT * FROM Users WHERE Username = ? AND Password = ?");
+if ($stmt) {
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        // User exists
+        $row = $result->fetch_assoc();
+        $userType = $row['UserType'];
         // Redirect based on UserType
         switch (strtolower($userType)) {
             case 'admin':
@@ -33,14 +37,13 @@ foreach ($lines as $line) {
                 echo "<h2>Unknown user type: $userType</h2>";
                 exit();
         }
-
-        exit(); // Stop after redirect
+    } else {
+        echo "<h2>Invalid username or password</h2>";
+        echo "<a href='../html/login.html'>Try again</a>";
     }
+    $stmt->close();
+} else {
+    echo "Database prepare failed: " . $conn->error;
 }
-
-// If login fails
-if (!$authenticated) {
-    echo "<h2>Invalid username or password</h2>";
-    echo "<a href='../html/login.html'>Try again</a>";
-}
+$conn->close();
 ?>
