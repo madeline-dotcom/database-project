@@ -4,6 +4,12 @@
     <title>Employee Management</title>
 </head>
 <body>
+    <h2>View Employees</h2>
+    <form action="../php/viewAllEmployees.php" method="post">
+        <input type="hidden" name="userType" value="admin">
+        <input type="submit" value="View All Employees">
+    </form>
+    <br><br><br><br>
     <h2>Add Employee</h2>
 
     <form action="../php/newEmployee.php" method="post">

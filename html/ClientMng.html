@@ -4,6 +4,12 @@
     <title>Client Management</title>
 </head>
 <body>
+    <h2>View Clients</h2>
+    <form action="../php/viewAllClients.php" method="post">
+        <input type="hidden" name="userType" value="admin">
+        <input type="submit" value="View All Clients">
+    </form>
+    <br><br><br><br>
     <h2>New Client</h2>
 
     <form action="../php/newClient.php" method="post">
