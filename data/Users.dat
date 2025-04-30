@@ -1,3 +1,4 @@
+UserID, Username, Password, UserType
 1,john_doe,Coffee4Life!2025,Employee
 2,jane_smith,Go2TheMoon@Now,Client
 3,admin_user,ILoveBooks#123,Admin

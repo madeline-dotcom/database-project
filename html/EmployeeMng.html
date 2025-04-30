@@ -4,14 +4,14 @@
     <title>Employee Management</title>
 </head>
 <body>
-    <h2>New Employee</h2>
+    <h2>Add Employee</h2>
 
-    <form action="../php/submit_ticket.php" method="post">
+    <form action="../php/newEmployee.php" method="post">
         <label for="name">Name:</label><br>
         <input type="text" id="name" name="name" required><br><br>
 
         <label for="employeeID">Employee ID:</label><br>
-        <input type="text" id="employeeID" name="employeeID" required><br><br>
+        <input type="number" id="employeeID" name="employeeID" required><br><br>
         <br><br>
 
         <input type="submit" value="Submit">
