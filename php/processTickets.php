@@ -2,6 +2,41 @@
 session_start();
 include 'template.php';// Includes the database connection
 
+echo "<!DOCTYPE html>
+<html>
+<head>
+    <title>My Tickets</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color:rgb(133, 184, 235); /* Blue background */
+            color: white;
+            text-align: center;
+        }
+        h1 {
+            margin-top: 40px;
+        }
+        table {
+            margin: 40px auto;
+            background-color: white;
+            color: black;
+            border-collapse: collapse;
+            width: 60%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        th, td {
+            padding: 12px 20px;
+            border: 1px solid #ccc;
+        }
+        th {
+            background-color: #003366;
+            color: white;
+        }
+    </style>
+</head>
+<body>";
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['employeeID'])) {
     $employeeID = $_POST['employeeID'];
 
