@@ -2,15 +2,48 @@
 <html>
 <head>
 <title>Device Management</title>
+<script>
+    // JavaScript validation to ensure the date is in the correct format and valid
+    function validateForm() {
+        const date = document.getElementById("date").value.trim();
+
+        console.log("Date:", date);
+
+        // Ensure the date is in the correct format (YYYY-MM-DD)
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+        if (!dateRegex.test(date)) {
+            alert("Purchase Date must be in the format YYYY-MM-DD.");
+            return false;
+        }
+
+        // Check if the date is valid
+        const [year, month, day] = date.split("-").map(Number);
+        const isValidDate = (y, m, d) => {
+            const dateObj = new Date(y, m - 1, d); // JavaScript months are 0-based
+            return (
+                dateObj.getFullYear() === y &&
+                dateObj.getMonth() === m - 1 &&
+                dateObj.getDate() === d
+            );
+        };
+
+        if (!isValidDate(year, month, day)) {
+            alert("Purchase Date is not a valid calendar date.");
+            return false;
+        }
+
+        return true; // Allow form submission if the date is valid
+    }
+</script>
 </head>
 <body>
 <h2>View Devices</h2>
 <form action="../php/viewDevice.php" method="post">
     <label for="serial">Serial Num:</label><br>
-    <input type="text" id="serial" name="serial"><br><br>
+    <input type="number" id="serial" name="serial"><br><br>
 
     <label for="clientID">Client ID:</label><br>
-    <input type="text" id="clientID" name="clientID"><br><br>
+    <input type="number" id="clientID" name="clientID"><br><br>
 
     <label for="date">Purchase Date:</label><br>
     <input type="text" id="purchasedDate" name="purchasedDate" placeholder="YYYY-MM-DD"><br><br>
@@ -24,18 +57,19 @@
 
 <h2>Add Device</h2>
 
-<form action="#" method="post">
+<form action="../php/newDevice.php" method="post" onsubmit="return validateForm()">
     <label for="serial">Serial Num:</label><br>
-    <input type="text" id="serial" name="serial" required><br><br>
+    <input type="number" id="serial" name="serial" required><br><br>
 
     <label for="clientID">Client ID:</label><br>
-    <input type="text" id="clientID" name="clientID" required><br><br>
+    <input type="number" id="clientID" name="clientID" required><br><br>
 
     <label for="date">Purchase Date:</label><br>
-    <input type="text" id="date" name="date" placeholder="YYYY-MM-DD"><br><br>
+    <input type="text" id="date" name="date" placeholder="YYYY-MM-DD" required><br><br>
 
     <label for="type">Device Type:</label><br>
     <select id="type" name="type" required>
+        <option value="">--Select--</option>
         <option value="Computer">Computer</option>
         <option value="Printer">Printer</option>
         <option value="Server">Server</option>
@@ -47,9 +81,9 @@
 
 <h2>Remove Device</h2>
 
-<form action="#" method="post">
+<form action="../php/removeDevice.php" method="post">
     <label for="serial">Serial Num:</label><br>
-    <input type="text" id="serial" name="serial" required><br><br>
+    <input type="number" id="serial" name="serial" required><br><br>
     <input type="submit" value="Remove">
 </form>
 

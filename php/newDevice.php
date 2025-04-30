@@ -2,28 +2,52 @@
 include 'template.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $serialNum = $_POST['serialNum'];
+    $serialNum = $_POST['serial'];
     $clientID = $_POST['clientID'];
-    $lastWorkedOn = !empty($_POST['lastWorkedOn']) ? $_POST['lastWorkedOn'] : NULL;
-    $purchasedDate = !empty($_POST['purchasedDate']) ? $_POST['purchasedDate'] : NULL;
-    $ticketNum = !empty($_POST['ticketNum']) ? $_POST['ticketNum'] : NULL;
+    $deviceType = $_POST['type'];
+    $purchasedDate = !empty($_POST['date']) ? $_POST['date'] : NULL;
 
-    if (!empty($serialNum) && is_numeric($clientID)) {
-        $stmt = $conn->prepare("INSERT INTO Device (SerialNum, ClientID, LastWorkedOn, PurchasedDate, TicketNum) 
-                                VALUES (?, ?, ?, ?, ?)");
-
-        $stmt->bind_param("sissi", $serialNum, $clientID, $lastWorkedOn, $purchasedDate, $ticketNum);
-
-        if ($stmt->execute()) {
-            echo "New device added successfully.";
-        } else {
-            echo "Error: " . $stmt->error;
-        }
-
-        $stmt->close();
-    } else {
-        echo "Please fill in Serial Number and a valid Client ID.";
+    // Validate input
+    if (empty($serialNum) || empty($clientID) || empty($deviceType)) {
+        die("Error: Serial Number, Client ID, and Device Type are required.");
     }
+
+    if (!is_numeric($clientID)) {
+        die("Error: Client ID must be a valid number.");
+    }
+
+    // Check if the device already exists
+    $checkStmt = $conn->prepare("SELECT SerialNum FROM Device WHERE SerialNum = ?");
+    if ($checkStmt === false) {
+        die("Prepare failed: " . $conn->error);
+    }
+    $checkStmt->bind_param("i", $serialNum);
+    $checkStmt->execute();
+    $checkStmt->store_result();
+
+    if ($checkStmt->num_rows > 0) {
+        die("Error: A device with Serial Number $serialNum already exists.");
+    }
+    $checkStmt->close();
+
+    // Prepare the SQL query
+    $stmt = $conn->prepare("INSERT INTO Device (SerialNum, DeviceType, ClientID, PurchasedDate) 
+                            VALUES (?, ?, ?, ?)");
+    if ($stmt === false) {
+        die("Prepare failed: " . $conn->error);
+    }
+
+    // Bind parameters
+    $stmt->bind_param("ssis", $serialNum, $deviceType, $clientID, $purchasedDate);
+
+    // Execute the query
+    if ($stmt->execute()) {
+        echo "New device added successfully.";
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
 }
 
 $conn->close();
