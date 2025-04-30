@@ -2,42 +2,46 @@
 include 'template.php'; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $ticketNum = $_POST['ticketNum'];
+    $ticketNum = $_POST['ticketNum'] ?? null;
 
-    if (is_numeric($ticketNum)) {
-        // Step 1: Check if the ticket exists and get its current status
-        $checkStmt = $conn->prepare("SELECT Status FROM Ticket WHERE TicketNum = ?");
-        $checkStmt->bind_param("i", $ticketNum);
-        $checkStmt->execute();
-        $result = $checkStmt->get_result();
-
-        if ($result->num_rows > 0) {
-            $row = $result->fetch_assoc();
-            $currentStatus = $row['Status'];
-
-            if ($currentStatus === 'Resolved') {
-                echo "The ticket is already resolved.";
-            } else {
-                // Step 2: Update the ticket status to 'Resolved'
-                $stmt = $conn->prepare("UPDATE Ticket SET Status = 'Resolved' WHERE TicketNum = ?");
-                $stmt->bind_param("i", $ticketNum);
-
-                if ($stmt->execute()) {
-                    echo "Ticket closed successfully!";
-                } else {
-                    echo "Error: " . $stmt->error;
-                }
-
-                $stmt->close();
-            }
-        } else {
-            echo "No ticket found with that Ticket Number.";
-        }
-
-        $checkStmt->close();
-    } else {
-        echo "Invalid Ticket Number.";
+    // Validate input
+    if (empty($ticketNum)) {
+        die("Ticket Number is required.");
     }
+
+    // Check if the ticket exists and is not already closed
+    $checkStmt = $conn->prepare("SELECT Status FROM Ticket WHERE TicketNum = ?");
+    $checkStmt->bind_param("i", $ticketNum);
+    $checkStmt->execute();
+    $checkStmt->bind_result($currentStatus);
+    if ($checkStmt->fetch()) {
+        if ($currentStatus === 'Closed') {
+            die("Error: Ticket #$ticketNum is already closed.");
+        }
+    } else {
+        die("Error: Ticket #$ticketNum does not exist.");
+    }
+    $checkStmt->close();
+
+    // Update the ticket status to 'Closed'
+    $stmt = $conn->prepare("UPDATE Ticket SET Status = 'Closed' WHERE TicketNum = ?");
+    if ($stmt === false) {
+        die("Prepare failed: " . $conn->error);
+    }
+
+    $stmt->bind_param("i", $ticketNum);
+
+    if ($stmt->execute()) {
+        if ($stmt->affected_rows > 0) {
+            echo "Ticket #$ticketNum has been successfully closed.";
+        } else {
+            echo "No ticket found with Ticket Number #$ticketNum.";
+        }
+    } else {
+        echo "Error closing ticket: " . $stmt->error;
+    }
+
+    $stmt->close();
 }
 
 $conn->close();

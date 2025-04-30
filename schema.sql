@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS Ticket (
     SerialNum INT NOT NULL,
     ClientID INT NOT NULL,
     DeviceType VARCHAR(15) NOT NULL,
-    Status VARCHAR(15) NOT NULL,
+    Status ENUM('Open', 'In Progress', 'Closed') NOT NULL,
     CONSTRAINT TicketNumPK PRIMARY KEY (TicketNum),
     CONSTRAINT TicketEmpFK FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),
     CONSTRAINT TicketClientFK FOREIGN KEY (ClientID) REFERENCES Client(ClientID)

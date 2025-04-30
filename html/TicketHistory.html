@@ -27,17 +27,19 @@
         <option value="">--Select--</option>
         <option value="Open">Open</option>
         <option value="In Progress">In Progress</option>
-        <option value="Resolved">Resolved</option>
         <option value="Closed">Closed</option>
     </select><br><br>
 
     <input type="submit" value="Search">
 </form>
 
-<h1>Start New</h1>
-<form action="#" method="post">
+<h1>Start New Ticket</h1>
+<form action="../php/claimTicket.php" method="post">
     <label for="ticketNum">Ticket Number:</label><br>
     <input type="text" id="ticketNum" name="ticketNum" required><br><br>
+
+    <label for="employeeID">EmployeeID:</label><br>
+    <input type="text" id="employeeID" name="employeeID" required><br><br>
     <input type="submit" value="Claim">
     <!-- should set employee id to the users and status to in progress --> 
 </form>
