@@ -11,7 +11,12 @@
         <input type="text" id="ticketNum" name="ticketNum" required><br><br>
 
         <label for="deviceType">Device Type:</label><br>
-        <input type="text" id="deviceType" name="deviceType" required><br><br>
+        <select id="deviceType" name="deviceType" required>
+            <option value="">--Select--</option>
+            <option value="Computer">Computer</option>
+            <option value="Printer">Printer</option>
+            <option value="Server">Server</option>
+        </select><br><br>
 
         <label for="serialNum">Device Serial Number:</label><br>
         <input type="text" id="serialNum" name="serialNum" required><br><br>
@@ -19,10 +24,8 @@
         <label for="clientID">Client ID:</label><br>
         <input type="text" id="clientID" name="clientID" required><br><br>
 
-	<label for="date">Date(mm/dd/yy):</label><br>
+        <label for="date">Date (mm/dd/yy):</label><br>
         <input type="text" id="date" name="date" required><br><br>
-
-        
 
         <input type="submit" value="Submit Ticket">
     </form>

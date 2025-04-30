@@ -3,7 +3,8 @@ USE Company;
 
 CREATE TABLE IF NOT EXISTS Client (
     ClientID INT NOT NULL,
-    LocationName VARCHAR(15) NOT NULL,
+    Name VARCHAR(15) NOT NULL,
+    Location VARCHAR(30) NOT NULL,
     CONSTRAINT ClientIDPK PRIMARY KEY (ClientID)
 );
 
@@ -18,7 +19,7 @@ CREATE TABLE IF NOT EXISTS Ticket (
     EmployeeID INT NOT NULL,
     SerialNum INT NOT NULL,
     ClientID INT NOT NULL,
-    DeviceType VARCHAR(15) NOT NULL,
+    DeviceType ENUM('Computer', 'Printer', 'Server') NOT NULL,
     Status ENUM('Open', 'In Progress', 'Closed') NOT NULL,
     CONSTRAINT TicketNumPK PRIMARY KEY (TicketNum),
     CONSTRAINT TicketEmpFK FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),
@@ -27,6 +28,7 @@ CREATE TABLE IF NOT EXISTS Ticket (
 
 CREATE TABLE IF NOT EXISTS Device (
     SerialNum INT NOT NULL,
+    DeviceType ENUM('Computer', 'Printer', 'Server') NOT NULL,
     ClientID INT NOT NULL,
     LastWorkedOn DATE,
     PurchasedDate DATE,
@@ -36,9 +38,9 @@ CREATE TABLE IF NOT EXISTS Device (
     CONSTRAINT DeviceTicketFK FOREIGN KEY (TicketNum) REFERENCES Ticket(TicketNum) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS Users(
+CREATE TABLE IF NOT EXISTS Users (
     UserID INT AUTO_INCREMENT PRIMARY KEY,
     Username VARCHAR(50) UNIQUE NOT NULL,
     Password VARCHAR(255) NOT NULL,
-    UserType ENUM('client', 'employee', 'admin') NOT NULL
+    UserType ENUM('Client', 'Employee', 'Admin') NOT NULL
 );

@@ -22,42 +22,36 @@
 </form>
 <br><br>
 
-<h2>New Device</h2>
+<h2>Add Device</h2>
 
-    <form action="#" method="post">
-        <label for="serial">Serial Num:</label><br>
-        <input type="text" id="serial" name="serial" required><br><br>
+<form action="#" method="post">
+    <label for="serial">Serial Num:</label><br>
+    <input type="text" id="serial" name="serial" required><br><br>
 
-        <label for="clientID">Client ID:</label><br>
-        <input type="text" id="clientID" name="clientID" required><br><br>
-        
-	
-	<label for="date">Purchase Date:</label><br>
-        <input type="text" id="date" name="date" placeholder="YYYY-MM-DD"><br><br>
-        
-	
-	<label for="type">Device Type:</label><br>
-        <select id="type" name="type">
-            <option value="computer">Computer</option>
-            <option value="printer">Printer</option>
-            <option value="server">Server</option>
-        </select><br><br>
+    <label for="clientID">Client ID:</label><br>
+    <input type="text" id="clientID" name="clientID" required><br><br>
 
-        <input type="submit" value="Add">
-    </form>
+    <label for="date">Purchase Date:</label><br>
+    <input type="text" id="date" name="date" placeholder="YYYY-MM-DD"><br><br>
+
+    <label for="type">Device Type:</label><br>
+    <select id="type" name="type" required>
+        <option value="Computer">Computer</option>
+        <option value="Printer">Printer</option>
+        <option value="Server">Server</option>
+    </select><br><br>
+
+    <input type="submit" value="Add">
+</form>
 <br><br><br><br>
+
 <h2>Remove Device</h2>
 
-    <form action="#" method="post">
-
-        <label for="serial">Serial Num:</label><br>
-        <input type="text" id="serial" name="serial" required><br><br>
-        <br><br>
-
-        <input type="submit" value="Remove">
-    </form>
-
+<form action="#" method="post">
+    <label for="serial">Serial Num:</label><br>
+    <input type="text" id="serial" name="serial" required><br><br>
+    <input type="submit" value="Remove">
+</form>
 
 </body>
-
 </html>
