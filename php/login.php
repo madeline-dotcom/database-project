@@ -1,52 +1,46 @@
 <?php
-include 'template.php';
+// Path to User.dat
+$userFile = "../data/Users.dat"; // Make sure this path is correct
 
-session_start(); 
+// Get form input
+$username = trim($_POST['username'] ?? '');
+$password = trim($_POST['password'] ?? '');
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Sanitize and retrieve input
-    $username = trim($_POST['username']);
-    $password = $_POST['password'];
+// Read file lines
+$lines = file($userFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 
-    // Prepare SQL statement
-    $stmt = $conn->prepare("SELECT UserID, Username, Password, UserType FROM Users WHERE Username = ?");
-    if ($stmt) {
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
+$authenticated = false;
 
-        // Fetch result
-        $result = $stmt->get_result();
-        if ($result && $result->num_rows === 1) {
-            $row = $result->fetch_assoc();
+foreach ($lines as $line) {
+    // Split and trim each field
+    list($userID, $fileUsername, $filePassword, $userType) = array_map('trim', explode(',', $line));
 
-            // Verify password
-            if ($password === $row['Password']) {
-                $_SESSION['username'] = $row['Username'];
-                $_SESSION['usertype'] = $row['UserType'];
+    if ($username === $fileUsername && $password === $filePassword) {
+        $authenticated = true;
 
-                // Redirect based on user type
-                switch ($row['UserType']) {
-                    case 'Admin':
-                        header("Location: ../html/adminPage.html");
-                        break;
-                    case 'Employee':
-                        header("Location: ../html/employee.html");
-                        break;
-                    default:
-                        header("Location: ../html/client.html");
-                        break;
-                }
+        // Redirect based on UserType
+        switch (strtolower($userType)) {
+            case 'admin':
+                header("Location: http://localhost:8000/html/admin.html");
+                break;
+            case 'client':
+                header("Location: http://localhost:8000/html/client.html");
+                break;
+            case 'employee':
+                header("Location: http://localhost:8000/html/employee.html");
+                break;
+            default:
+                echo "<h2>Unknown user type: $userType</h2>";
                 exit();
-            } else {
-                echo "Invalid password.";
-            }
-        } else {
-            echo "No such user found.";
         }
-        $stmt->close();
-    } else {
-        echo "Database query failed.";
+
+        exit(); // Stop after redirect
     }
-    $conn->close();
+}
+
+// If login fails
+if (!$authenticated) {
+    echo "<h2>Invalid username or password</h2>";
+    echo "<a href='../html/login.html'>Try again</a>";
 }
 ?>

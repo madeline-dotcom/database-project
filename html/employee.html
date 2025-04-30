@@ -1,20 +1,104 @@
 <?php
 session_start();
-$name = $SESSION['name'] ?? 'User';
+$username = $_SESSION['name'] ?? 'User';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Employee Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #cceeff;
+    }
 
-<title>Employee Dashboard</title>
+    /* Top navigation bar */
+    .top-bar {
+      background-color: #003366;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+    }
+
+    .company-name {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .user-info span {
+      font-size: 18px;
+    }
+
+    .logout-button {
+      padding: 8px 16px;
+      background-color: white;
+      color: #003366;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .logout-button:hover {
+      background-color: #ddd;
+    }
+
+    /* Main content */
+    .main-content {
+      padding: 40px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .card {
+      background-color: white;
+      padding: 30px;
+      margin-bottom: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      width: 60%;
+      font-size: 22px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.02);
+      background-color: #f0f8ff;
+    }
+  </style>
 </head>
 <body>
-<h1>Welcome <? php echo htmlspecialchars($name); ?></h1>
-<button onclick="document.location='TicketHistory.html'">Ticket History</button>
-<button onclick="document.location='myTickets.html'">My Tickets</button>
-<button onclick="document.location='DeviceMng.html'">Devices</button>
-<button onclick="document.location='Login.html'">Log Out</button>
 
+<div class="top-bar">
+  <div class="company-name">ANT IT Company</div>
+  <div class="user-info">
+    <span>Welcome, <?php echo htmlspecialchars($username); ?></span>
+    <button class="logout-button" onclick="document.location='Login.html'">Log Out</button>
+  </div>
+</div>
+
+<div class="main-content">
+  <div class="section-title">Account Summary</div>
+
+  <div class="card" onclick="document.location='TicketHistory.html'">Ticket History</div>
+  <div class="card" onclick="document.location='myTickets.html'">My Tickets</div>
+  <div class="card" onclick="document.location='DeviceMng.html'">Devices</div>
+</div>
 
 </body>
 </html>
