@@ -10,95 +10,123 @@ $username = $_SESSION['name'] ?? 'User';
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: #cceeff;
+      background-color: #dde4ff;
     }
 
-    /* Top navigation bar */
     .top-bar {
-      background-color: #003366;
-      color: white;
+      background-color: #fdf1dc;
       display: flex;
-      justify-content: space-between;
       align-items: center;
       padding: 20px 40px;
     }
 
+    .logo {
+      width: 40px;
+      margin-right: 20px;
+    }
+
     .company-name {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: bold;
+      color: #000;
     }
 
-    .user-info {
+    .welcome {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 100px 80px 20px;
+      color: #000;
+    }
+
+    .card-container {
       display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .user-info span {
-      font-size: 18px;
-    }
-
-    .logout-button {
-      padding: 8px 16px;
-      background-color: white;
-      color: #003366;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .logout-button:hover {
-      background-color: #ddd;
-    }
-
-    /* Main content */
-    .main-content {
-      padding: 40px;
-    }
-
-    .section-title {
-      font-size: 28px;
-      color: #333;
-      margin-bottom: 30px;
+      justify-content: center;
+      gap: 40px;
+      margin: 20px 80px;
     }
 
     .card {
-      background-color: white;
-      padding: 30px;
-      margin-bottom: 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      width: 60%;
-      font-size: 22px;
-      font-weight: bold;
+      width: 260px;
+      height: 200px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      border: none;
       cursor: pointer;
-      transition: transform 0.2s ease;
+    }
+
+    .card h3 {
+      font-size: 30px;
+      margin-bottom: 10px;
+      text-decoration: underline;
+      color: #000;
+    }
+
+    .card p {
+      font-size: 14px;
+      color: #000;
+      margin: 0;
+    }
+
+    .card.ticket-history {
+      background-color: #c9abd1;
+    }
+
+    .card.my-tickets {
+      background-color: #a4d3f4;
+    }
+
+    .card.devices {
+      background-color: #fdf1dc;
     }
 
     .card:hover {
-      transform: scale(1.02);
-      background-color: #f0f8ff;
+      opacity: 0.9;
+    }
+
+    .logout-button {
+      position: absolute;
+      right: 40px;
+      bottom: 40px;
+      padding: 10px 20px;
+      background-color: #dde4ff;
+      color: #000;
+      border: 1px solid #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .logout-button:hover {
+      background-color: #ccc;
     }
   </style>
 </head>
 <body>
 
 <div class="top-bar">
+  <img src="../images/ant.png" alt="Logo" class="logo">
   <div class="company-name">ANT IT Company</div>
-  <div class="user-info">
-    <span>Welcome, Employee<?php echo htmlspecialchars($username); ?></span>
-    <button class="logout-button" onclick="document.location='Login.html'">Log Out</button>
+</div>
+
+<div class="welcome">Welcome, <?php echo htmlspecialchars($username); ?></div>
+
+<div class="card-container">
+  <div class="card ticket-history" onclick="document.location='TicketHistory.html'">
+    <h3>Ticket History</h3>
+    <p>You can search ticket; view all tickets or find one you want to work on.<br>You can also start new ticket.</p>
+  </div>
+  <div class="card my-tickets" onclick="document.location='myTickets.html'">
+    <h3>My Tickets</h3>
+    <p>See the tickets assigned to you.<br>Close ticket once completed.</p>
+  </div>
+  <div class="card devices" onclick="document.location='DeviceMng.html'">
+    <h3>Devices</h3>
+    <p>View devices, look up any device,<br>Add device to the system,<br>Remove device from the system.</p>
   </div>
 </div>
 
-<div class="main-content">
-  <div class="section-title">Account Summary</div>
-
-  <div class="card" onclick="document.location='TicketHistory.html'">Ticket History</div>
-  <div class="card" onclick="document.location='myTickets.html'">My Tickets</div>
-  <div class="card" onclick="document.location='DeviceMng.html'">Devices</div>
-</div>
+<button class="logout-button" onclick="document.location='Login.html'">LOGOUT</button>
 
 </body>
 </html>

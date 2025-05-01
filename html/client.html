@@ -9,104 +9,129 @@ $client_name = $_SESSION['client_name'] ?? 'Client';
   <style>
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #cceeff;
+      font-family: 'Arial', sans-serif;
+      background-color: #dde4ff;
     }
 
     .top-bar {
-      background-color: #003366;
-      color: white;
+      background-color: #fdf1dc;
       display: flex;
-      justify-content: space-between;
       align-items: center;
       padding: 20px 40px;
     }
 
+    .logo {
+      width: 40px;
+      margin-right: 20px;
+    }
+
     .company-name {
-      font-size: 24px;
+      font-size: 26px;
       font-weight: bold;
+      color: #000;
     }
 
-    .user-info {
+    .card-container {
       display: flex;
-      align-items: center;
-      gap: 20px;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 60px;
     }
 
-    .user-info span {
+    .card {
+      width: 280px;
+      border: 1px solid #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .card-top {
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+
+    .card-top img {
+      width: 120px;
+      height: auto;
+    }
+
+    .card-bottom {
+      padding: 20px;
+      border-top: 1px solid #000;
+    }
+
+    .card-bottom h3 {
+      margin: 0 0 10px 0;
       font-size: 18px;
+      text-decoration: underline;
+      color: #000;
+    }
+
+    .card-bottom p {
+      margin: 0;
+      font-size: 14px;
+      color: #000;
+    }
+
+    .submit {
+      background-color: #c9abd1;
+    }
+
+    .mytickets {
+      background-color: #a4d3f4;
     }
 
     .logout-button {
-      padding: 8px 16px;
-      background-color: white;
-      color: #003366;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
+      position: absolute;
+      right: 40px;
+      bottom: 40px;
+      padding: 10px 20px;
+      background-color: #dde4ff;
+      color: #000;
+      border: 1px solid #000;
       font-weight: bold;
+      cursor: pointer;
     }
 
     .logout-button:hover {
-      background-color: #ddd;
-    }
-
-    /* Submit Ticket Card */
-    .ticket-card {
-      background-color: #003366;
-      color: white;
-      width: 300px;
-      padding: 40px 20px;
-      text-align: center;
-      border-radius: 10px;
-      margin: 80px auto;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-
-    .ticket-card img {
-      width: 80px;
-      margin-bottom: 20px;
-    }
-
-    .ticket-card h2 {
-      margin: 10px 0;
-      font-size: 22px;
-      text-decoration: underline;
-    }
-
-    .ticket-card button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: white;
-      color: #003366;
-      border: 2px solid #003366;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    .ticket-card button:hover {
-      background-color: #e0e0e0;
+      background-color: #ccc;
     }
   </style>
 </head>
 <body>
 
 <div class="top-bar">
+  <img src="../images/ant.png" alt="Logo" class="logo">
   <div class="company-name">ANT IT Company</div>
-  <div class="user-info">
-    <span>Welcome, Client<?php echo htmlspecialchars($client_name); ?></span>
-    <button class="logout-button" onclick="document.location='Login.html'">Log Out</button>
+</div>
+
+<div class="card-container">
+  <div class="card submit">
+    <div class="card-top">
+      <img src="../images/ticketSubmission.png" alt="Submit Ticket Icon">
+    </div>
+    <div class="card-bottom">
+      <h3><a href="TicketSubmission.html">Submit a Ticket</a></h3>
+      <p>Allows a client to file a ticket; needs to enter clientID, device type, device serial number. <br> Tickets are open.</p>
+    </div>
+  </div>
+
+  <div class="card mytickets">
+    <div class="card-top">
+      <img src="../images/myTicket.png" alt="My Tickets Icon">
+    </div>
+    <div class="card-bottom">
+      <h3><a href="myTicketsClient.html">My Tickets</a></h3>
+      <p>Allows the clients to enter their ID and view all their tickets</p>
+    </div>
   </div>
 </div>
 
-<div class="ticket-card">
-  <img src="../images/ticket-icon.png" alt="Ticket Icon">
-  <h2>Submit a Ticket</h2>
-  <button onclick="document.location='TicketSubmission.html'">Report a Ticket</button>
-  <h2>My Tickets</h2>
-  <button onclick="document.location='myTicketsClient.html'">View My Tickets</button>
-</div>
+<button class="logout-button" onclick="document.location='Login.html'">LOGOUT</button>
 
 </body>
 </html>

@@ -1,15 +1,116 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Page Title</title>
+  <title>ANT IT Company - Home</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Open Sauce;
+      background-color: #dde4ff;
+    }
+
+    .top-bar {
+      background-color: #fdf1dc;
+      display: flex;
+      align-items: center;
+      padding: 20px 40px;
+    }
+
+    .logo {
+      width: 40px;
+      margin-right: 20px;
+    }
+
+    .company-name {
+      font-size: 26px;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .main {
+      display: flex;
+      /* justify-content: space-between; */
+      align-items: center;
+      padding: 60px 0 60px 80px;
+      gap: 10px;
+    }
+
+    .left-content {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+
+    .left-content h1 {
+      font-size: 76px;
+      font-weight: bold;
+      color: #000;
+      max-width: 500px;
+      margin-bottom: 40px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: nowrap;
+      gap: 10px;
+    }
+
+    .button-group button {
+      padding: 15px 30px;
+      font-size: 16px;
+      font-weight: bold;
+      border: 1px solid #000;
+      cursor: pointer;
+      margin-right: 1px;
+    }
+
+    .login-button {
+      background-color: #c9abd1;
+    }
+
+    .new-user-button {
+      background-color: #a4d3f4;
+    }
+
+    .login-button:hover, .new-user-button:hover {
+      opacity: 0.9;
+    }
+
+    .right-image {
+      flex-shrink: 1;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      /* height: 50%; */
+    }
+
+    .right-image img {
+      max-width: 140%;
+      height: auto;
+      display: block;
+      /*margin: 0;
+      padding: 0;*/
+    }
+  </style>
 </head>
 <body>
-#replace with log in
-<h1>This is a Heading</h1>
-<button onclick="document.location='client.html'">Client</button>
-<button onclick="document.location='employee.html'">Employee</button>
-<button onclick="document.location='adminPage.html'">Admin</button>
-<p>This is a paragraph.</p>
+
+  <div class="top-bar">
+    <img src="../images/ant.png" alt="Logo" class="logo">
+    <div class="company-name">ANT IT Company</div>
+  </div>
+
+  <div class="main">
+    <div class="left-content">
+      <h1>A space for devices, a space for solutions</h1>
+      <div class="button-group">
+        <button class="login-button" onclick="document.location='Login.html'">LOGIN IN</button>
+        <button class="new-user-button" onclick="document.location='../php/registerNewUser.php'">NEW USER</button>
+      </div>
+    </div>
+    <div class="right-image">
+      <img src="../images/bluebonnets.png" alt="Flower Field">
+    </div>
+  </div>
 
 </body>
 </html>
