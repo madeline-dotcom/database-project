@@ -6,7 +6,7 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Georgia', serif;
+      font-family: Open Source;
       background-color: #dbe4ff;
       position: relative;
       min-height: 100vh;
@@ -41,7 +41,7 @@
       border-radius: 20px;
       padding: 30px;
       text-align: center;
-      font-size: 20px;
+      font-size: 35px;
       text-decoration: underline;
       font-weight: normal;
       box-shadow: 0 0 8px rgba(0,0,0,0.2);
@@ -49,9 +49,9 @@
     }
 
     .tile img {
-      width: 80px;
-      height: 80px;
-      margin-bottom: 30px;
+      width: 100px;
+      height: 100px;
+      margin-bottom: 20px;
     }
 
     .tile.employee { background-color: #d4b8d6; height: 160px; }
@@ -82,9 +82,20 @@
   </div>
 
   <div class="grid-container">
-    <div class="tile employee" onclick="location.href='EmployeeMng.html'">Employee Management</div>
-    <div class="tile client" onclick="location.href='ClientMng.html'">Client Management</div>
-    <div class="tile device" onclick="location.href='DeviceMng.html'">Devices</div>
+    <div class="tile employee" onclick="location.href='EmployeeMng.html'">
+        <img src="../images/employeeMng.png" alt="Employee Mng Icon">
+        <div>Employee Management</div>
+    </div>   
+
+    <div class="tile client" onclick="location.href='ClientMng.html'">
+        <img src="../images/clientMng.png" alt="Client Mng Icon">
+        <div>Client Management</div>
+    </div>    
+
+    <div class="tile device" onclick="location.href='DeviceMng.html'">
+        <img src="../images/devices.png" alt="Devices Icon">
+        <div>Devices</div>
+    </div>    
 
     <div class="tile register" onclick="location.href='registerNewUser.html'">
       <img src="../images/registerNewUser.png" alt="Register Icon">
