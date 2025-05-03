@@ -2,6 +2,111 @@
 <html>
 <head>
 <title>Device Management</title>
+
+<style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #cceeff;
+        }
+
+        .top-bar {
+            background-color: #003366;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
+
+        .company-name {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-info span {
+            font-size: 18px;
+        }
+
+        .logout-button {
+            padding: 8px 16px;
+            background-color: white;
+            color: #003366;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-button:hover {
+            background-color: #ddd;
+        }
+	 .ticket-card {
+            background-color: #003366;
+            color: white;
+            width: 500px;
+            padding: 40px 30px;
+            border-radius: 10px;
+            margin: 80px auto;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .ticket-card h2 {
+            text-align: center;
+            text-decoration: underline;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+	input[type="number"], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+	input[type="DATE"], select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        input[type="submit"] {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            background-color: white;
+            color: #003366;
+            border: 2px solid #003366;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #e0e0e0;
+        }
+</style>
 <script>
     // JavaScript validation to ensure the date is in the correct format and valid
     function validateForm() {
@@ -37,24 +142,35 @@
 </script>
 </head>
 <body>
+<div class="top-bar">
+    <div class="company-name">ANT IT Company</div>
+    <div class="user-info">
+        <span>Welcome, Employee</span>
+        <button class="logout-button" onclick="document.location='Login.html'">Log Out</button>
+    </div>
+</div>
+<div class="ticket-card">
 <h2>View Devices</h2>
 <form action="../php/viewDevice.php" method="post">
-    <label for="serial">Serial Num:</label><br>
-    <input type="number" id="serial" name="serial"><br><br>
+
+    <label for="serial">Serial Num:</label>
+    <input type="number" id="serial" name="serial">
+
 
     <label for="clientID">Client ID:</label><br>
     <input type="number" id="clientID" name="clientID"><br><br>
 
     <label for="date">Purchase Date:</label><br>
-    <input type="text" id="purchasedDate" name="purchasedDate" placeholder="YYYY-MM-DD"><br><br>
+    <input type="date" id="date" name="date" placeholder="YYYY-MM-DD" required><br><br>
 
     <input type="checkbox" id="notRecent" name="notRecent" value="1">
     <label for="notRecent">Not Worked on Recently (Past Month)</label><br><br>
 
     <input type="submit" value="Search">
 </form>
+</div>
 <br><br>
-
+<div class="ticket-card">
 <h2>Add Device</h2>
 
 <form action="../php/newDevice.php" method="post" onsubmit="return validateForm()">
@@ -77,8 +193,9 @@
 
     <input type="submit" value="Add">
 </form>
+</div>
 <br><br><br><br>
-
+<div class="ticket-card">
 <h2>Remove Device</h2>
 
 <form action="../php/removeDevice.php" method="post">
@@ -86,6 +203,6 @@
     <input type="number" id="serial" name="serial" required><br><br>
     <input type="submit" value="Remove">
 </form>
-
+</div>
 </body>
 </html>
