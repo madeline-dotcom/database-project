@@ -5,7 +5,7 @@ INTO TABLE Client
 FIELDS TERMINATED BY ',' 
 LINES TERMINATED BY '\n'
 Ignore 1 LINES
-(ClientID, Name, Location);
+(ClientID, Name, LocationName);
 
 LOAD DATA LOCAL INFILE './data/Employee.dat'
 INTO TABLE Employee
