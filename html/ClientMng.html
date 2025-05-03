@@ -1,43 +1,189 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Client Management</title>
+  <title>Client Management</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #dde4ff;
+    }
+
+    .top-bar {
+      background-color: #fdf1dc;
+      display: flex;
+      align-items: center;
+      padding: 20px 40px;
+    }
+
+    .logo {
+      width: 40px;
+      margin-right: 20px;
+    }
+
+    .company-name {
+      font-size: 26px;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .user-info {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .user-info span {
+      font-size: 18px;
+      color: #000;
+    }
+
+    .home-button {
+      padding: 8px 16px;
+      background-color: #a4d3f4;
+      color: #000;
+      border: 1px solid #000;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .home-button:hover {
+      background-color: #90c0e0;
+    }
+
+    .logout-button {
+      position: fixed;
+      right: 40px;
+      bottom: 40px;
+      padding: 10px 20px;
+      background-color: #dde4ff;
+      color: #000;
+      border: 1px solid #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .logout-button:hover {
+      background-color: #ccc;
+    }
+
+    .card-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+      padding: 40px;
+    }
+
+    .form-card {
+      background-color: white;
+      color: #000;
+      width: 500px;
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border: 1px solid #000;
+    }
+
+    .form-card h2 {
+      text-align: center;
+      text-decoration: underline;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 4px;
+      border: 1px solid #000;
+      background-color: #f9f9f9;
+    }
+
+    input[type="submit"] {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background-color: #c9abd1;
+      color: #000;
+      border: 1px solid #000;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #b89bc3;
+    }
+
+    @media (max-width: 1100px) {
+      .form-card {
+        width: 90%;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h2>View Clients</h2>
-    <form action="../php/viewAllClients.php" method="post">
+
+  <div class="top-bar">
+    <img src="../images/ant.png" alt="Logo" class="logo">
+    <div class="company-name">ANT IT Company</div>
+    <div class="user-info">
+      <span>Client Management</span>
+      <button class="home-button" onclick="document.location='adminPage.html'">Home</button>
+    </div>
+  </div>
+
+  <div class="card-container">
+
+    <div class="form-card">
+      <h2>View Clients</h2>
+      <form action="../php/viewAllClients.php" method="post">
         <input type="hidden" name="userType" value="admin">
         <input type="submit" value="View All Clients">
-    </form>
-    <br><br><br><br>
-    <h2>New Client</h2>
+      </form>
+    </div>
 
-    <form action="../php/newClient.php" method="post">
-        <label for="name">Name:</label><br>
-        <input type="text" id="name" name="name" required><br><br>
+    <div class="form-card">
+      <h2>New Client</h2>
+      <form action="../php/newClient.php" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
 
-        <label for="clientID">Client ID:</label><br>
-        <input type="number" id="clientID" name="clientID" required><br><br>
+        <label for="clientID">Client ID:</label>
+        <input type="number" id="clientID" name="clientID" required>
 
-	<label for="location">Location:</label><br>
-        <input type="text" id="location" name="location" required><br><br>
-        <br><br>
-
-        <input type="submit" value="Submit">
-    </form>
-<br><br><br><br>
-<h2>Remove Client</h2>
-
-    <form action="../php/removeClient.php" method="post">
-
-        <label for="clientID">Client ID:</label><br>
-        <input type="number" id="clientID" name="clientID" required><br><br>
-        <br><br>
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" required>
 
         <input type="submit" value="Submit">
-    </form>
+      </form>
+    </div>
 
+    <div class="form-card">
+      <h2>Remove Client</h2>
+      <form action="../php/removeClient.php" method="post">
+        <label for="clientID">Client ID:</label>
+        <input type="number" id="clientID" name="clientID" required>
+
+        <input type="submit" value="Submit">
+      </form>
+    </div>
+
+  </div>
+
+  <button class="logout-button" onclick="document.location='Login.html'">LOGOUT</button>
 
 </body>
 </html>
-
