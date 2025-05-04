@@ -167,7 +167,7 @@ $result = $stmt->get_result();
     <?php endif; ?>
 
     <div style="text-align: center;">
-        <a class="back-button" href="../html/DeviceMng.html">← Back to Device Management</a>
+        <a class="back-button" href="../pages/DeviceMng.php">← Back to Device Management</a>
     </div>
 </div>
 

@@ -126,7 +126,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php if (!empty($message)): ?>
         <div class="message"><?= htmlspecialchars($message) ?></div>
     <?php endif; ?>
-    <a href="../html/TicketSubmission.html" class="back-button">← Back to Ticket Form</a>
+    <a href="../pages/TicketSubmission.php" class="back-button">← Back to Ticket Form</a>
 </div>
 </body>
 </html>

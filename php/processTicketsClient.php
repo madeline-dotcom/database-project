@@ -168,7 +168,7 @@ $conn->close();
         </table>
     <?php endif; ?>
 
-    <a class="back-button" href="../html/myTicketsClient.html">← Back to My Tickets</a>
+    <a class="back-button" href="../pages/myTicketsClient.php">← Back to My Tickets</a>
 </div>
 
 </body>
