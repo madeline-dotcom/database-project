@@ -146,7 +146,7 @@ $conn->close();
         <div class="message error"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
-    <a class="back-button" href="../html/TicketHistory.html">← Back to Ticket History</a>
+    <a class="back-button" href="../pages/TicketHistory.php">← Back to Ticket History</a>
 </div>
 
 </body>

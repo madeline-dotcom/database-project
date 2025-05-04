@@ -90,7 +90,7 @@ $conn->close();
     <div class="container">
         <h1>Remove Device</h1>
         <div class="message"><?= $message ?></div>
-        <a class="back-button" href="../html/DeviceMng.html">← Back to Device Management</a>
+        <a class="back-button" href="../pages/DeviceMng.php">← Back to Device Management</a>
     </div>
 </body>
 </html>
