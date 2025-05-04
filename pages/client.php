@@ -35,50 +35,78 @@ $username = $_SESSION['username'];
       color: #000;
     }
 
+    .welcome-message {
+      margin-left: auto;
+      font-size: 18px;
+      font-weight: bold;
+      color: #000;
+    }
+
     .card-container {
       display: flex;
       justify-content: center;
-      gap: 40px;
-      margin-top: 60px;
+      gap: 60px;
+      margin-top: 80px;
+    }
+
+    .card-link {
+      text-decoration: none;
+      color: inherit;
+      display: inline-block;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .card-link:hover .card {
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+      transform: translateY(-5px);
+      cursor: pointer;
     }
 
     .card {
-      width: 280px;
+      width: 400px;
+      height: 500px;
       border: 1px solid #000;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      overflow: hidden;
     }
 
     .card-top {
-      padding: 20px;
+      height: 260px;
+      padding: 30px;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 200px;
     }
 
     .card-top img {
-      width: 120px;
+      width: 160px;
       height: auto;
     }
 
     .card-bottom {
-      padding: 20px;
+      height: 240px;
+      padding: 30px;
       border-top: 1px solid #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
     }
 
     .card-bottom h3 {
-      margin: 0 0 10px 0;
-      font-size: 18px;
-      text-decoration: underline;
+      margin: 0 0 15px 0;
+      font-size: 24px;
       color: #000;
+      text-decoration: underline;
     }
 
     .card-bottom p {
       margin: 0;
-      font-size: 14px;
+      font-size: 16px;
       color: #000;
+      line-height: 1.4;
     }
 
     .submit {
@@ -111,31 +139,35 @@ $username = $_SESSION['username'];
 <div class="top-bar">
   <img src="../images/ant.png" alt="Logo" class="logo">
   <div class="company-name">ANT IT Company</div>
-  <div class="welcome-message" style="margin-left: auto; font-size: 18px; font-weight: bold; color: #000;">
+  <div class="welcome-message">
     Welcome, <?php echo htmlspecialchars($username); ?>
   </div>
 </div>
 
 <div class="card-container">
-  <div class="card submit">
-    <div class="card-top">
-      <img src="../images/ticketSubmission.png" alt="Submit Ticket Icon">
+  <a href="TicketSubmission.php" class="card-link">
+    <div class="card submit">
+      <div class="card-top">
+        <img src="../images/ticketSubmission.png" alt="Submit Ticket Icon">
+      </div>
+      <div class="card-bottom">
+        <h3>Submit a Ticket</h3>
+        <p>File a ticket by entering your client ID, device type, and serial number. Tickets will be marked as open.</p>
+      </div>
     </div>
-    <div class="card-bottom">
-      <h3><a href="TicketSubmission.php">Submit a Ticket</a></h3>
-      <p>Allows a client to file a ticket; needs to enter clientID, device type, device serial number. <br> Tickets are open.</p>
-    </div>
-  </div>
+  </a>
 
-  <div class="card mytickets">
-    <div class="card-top">
-      <img src="../images/myTicket.png" alt="My Tickets Icon">
+  <a href="myTicketsClient.php" class="card-link">
+    <div class="card mytickets">
+      <div class="card-top">
+        <img src="../images/myTicket.png" alt="My Tickets Icon">
+      </div>
+      <div class="card-bottom">
+        <h3>My Tickets</h3>
+        <p>Enter your client ID to view the status and details of all your submitted tickets.</p>
+      </div>
     </div>
-    <div class="card-bottom">
-      <h3><a href="myTicketsClient.php">My Tickets</a></h3>
-      <p>Allows the clients to enter their ID and view all their tickets</p>
-    </div>
-  </div>
+  </a>
 </div>
 
 <button class="logout-button" onclick="document.location='../php/logout.php'">LOGOUT</button>

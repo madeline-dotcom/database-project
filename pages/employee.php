@@ -42,35 +42,71 @@ $username = $_SESSION['username'] ?? 'User';
       color: #000;
     }
 
+    /* Wrapper for centering cards vertically */
+    .content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 120px); /* 100vh minus the top bar height */
+    }
+
     .card-container {
       display: flex;
       justify-content: center;
-      gap: 40px;
-      margin: 20px 80px;
+      align-items: center;
+      gap: 60px;
+      flex-wrap: nowrap;
     }
 
     .card {
-      width: 260px;
-      height: 200px;
+      width: 350px; /* Same width */
+      height: 300px; /* Same height */
       padding: 20px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      border: none;
+      justify-content: center; /* Center content vertically */
+      align-items: center; /* Center content horizontally */
+      border: 3px solid #000; /* Thick border */
+      box-sizing: border-box; /* Include padding in total size */
       cursor: pointer;
+      background-color: #fff; /* White background */
+      text-align: center; /* Center the text */
+      transition: all 0.3s ease; /* Smooth transition for shadow effect and scaling */
+    }
+
+    /* Stronger hover effect */
+    .card:hover {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Larger shadow */
+      transform: scale(1.05); /* Slight scaling */
     }
 
     .card h3 {
-      font-size: 30px;
-      margin-bottom: 10px;
+      font-size: 30px; /* Increased size for heading */
+      margin-bottom: 20px;
       text-decoration: underline;
       color: #000;
+      font-weight: 700; /* Stronger weight for more impact */
+      display: flex;
+      align-items: center; /* Center title vertically */
+      justify-content: center; /* Center title horizontally */
+      height: 40px; /* Fixed height to help with centering */
+    }
+
+    /* Adjust "My Tickets" heading */
+    .card.my-tickets h3 {
+      margin-top: -10px; /* Move the "My Tickets" heading up */
+    }
+
+    /* Adjust "Devices" heading */
+    .card.devices h3 {
+      margin-top: -10px; /* Move the "Devices" heading up */
     }
 
     .card p {
-      font-size: 14px;
+      font-size: 18px; /* Increased size for paragraph text */
       color: #000;
       margin: 0;
+      line-height: 1.5; /* Increased line height for readability */
     }
 
     .card.ticket-history {
@@ -83,10 +119,6 @@ $username = $_SESSION['username'] ?? 'User';
 
     .card.devices {
       background-color: #fdf1dc;
-    }
-
-    .card:hover {
-      opacity: 0.9;
     }
 
     .logout-button {
@@ -116,20 +148,22 @@ $username = $_SESSION['username'] ?? 'User';
   </div>
 </div>
 
-<div class="card-container">
-  <div class="card ticket-history" onclick="document.location='TicketHistory.php'">
-    <h3>Ticket History</h3>
-    <p>You can search ticket; view all tickets or find one you want to work on.<br>You can also start new ticket.</p>
+<main class="content">
+  <div class="card-container">
+    <div class="card ticket-history" onclick="document.location='TicketHistory.php'">
+      <h3>Ticket History</h3>
+      <p>You can search tickets, view all tickets, or find the ones you want to work on.<br>You can also start new tickets.</p>
+    </div>
+    <div class="card my-tickets" onclick="document.location='myTickets.php'">
+      <h3>My Tickets</h3>
+      <p>See the tickets assigned to you.<br>Close the ticket once completed.</p>
+    </div>
+    <div class="card devices" onclick="document.location='DeviceMng.php'">
+      <h3>Devices</h3>
+      <p>View devices, look up any device,<br>Add device to the system,<br>Remove device from the system.</p>
+    </div>
   </div>
-  <div class="card my-tickets" onclick="document.location='myTickets.php'">
-    <h3>My Tickets</h3>
-    <p>See the tickets assigned to you.<br>Close ticket once completed.</p>
-  </div>
-  <div class="card devices" onclick="document.location='DeviceMng.php'">
-    <h3>Devices</h3>
-    <p>View devices, look up any device,<br>Add device to the system,<br>Remove device from the system.</p>
-  </div>
-</div>
+</main>
 
 <button class="logout-button" onclick="document.location='../php/logout.php'">LOGOUT</button>
 

@@ -56,6 +56,7 @@ $username = $_SESSION['username'];
       font-weight: normal;
       box-shadow: 0 0 8px rgba(0,0,0,0.2);
       cursor: pointer;
+      transition: all 0.3s ease; /* Smooth transition for shadow and scaling */
     }
 
     .tile img {
@@ -64,6 +65,7 @@ $username = $_SESSION['username'];
       margin-bottom: 20px;
     }
 
+    /* Tile Color Classes */
     .tile.employee { background-color: #d4b8d6; height: 160px; }
     .tile.client   { background-color: #9dc9f2; height: 160px; } 
     .tile.device   { background-color: #fdf1dc; height: 160px; }
@@ -71,6 +73,12 @@ $username = $_SESSION['username'];
     .tile.register { background-color: #9dc9f2; height: 160px; }
     .tile.submit   { background-color: #fdf1dc; height: 160px; }
     .tile.history  { background-color: #d4b8d6; height: 160px; }
+
+    /* Hover Effect for Tiles */
+    .tile:hover {
+      transform: scale(1.05); /* Slight scaling effect */
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
+    }
 
     .logout-btn {
       position: fixed;
@@ -135,7 +143,7 @@ $username = $_SESSION['username'];
       window.location.reload();
     }
   });
-</script>
+  </script>
 
 </body>
 </html>
