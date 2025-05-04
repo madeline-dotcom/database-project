@@ -8,12 +8,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $deviceType = isset($_POST['deviceType']) ? trim($_POST['deviceType']) : null;
     $serialNum = isset($_POST['serialNum']) ? trim($_POST['serialNum']) : null;
     $clientID = isset($_POST['clientID']) ? trim($_POST['clientID']) : null;
-    $employeeID = null;
+    $employeeID = isset($_POST['employeeID']) ? trim($_POST['employeeID']) : null;
     $status = "Open";
 
-    if (empty($ticketNum) || empty($deviceType) || empty($serialNum) || empty($clientID)) {
+    if (empty($ticketNum) || empty($deviceType) || empty($serialNum) || empty($clientID) || empty($employeeID)) {
         $message = "Error: All fields are required.";
-    } elseif (!is_numeric($ticketNum) || !is_numeric($serialNum) || !is_numeric($clientID)) {
+    } elseif (!is_numeric($ticketNum) || !is_numeric($serialNum) || !is_numeric($clientID) || !is_numeric($employeeID)) {
         $message = "Error: All fields must be valid numbers.";
     } else {
         $checkStmt = $conn->prepare("SELECT TicketNum FROM Ticket WHERE TicketNum = ?");

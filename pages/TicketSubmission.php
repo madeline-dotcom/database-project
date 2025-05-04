@@ -175,6 +175,9 @@ switch (strtolower($_SESSION['usertype'])) {
       <label for="clientID">Client ID:</label>
       <input type="text" id="clientID" name="clientID" required>
 
+      <label for="employeeID">Employee ID:</label>
+      <input type="text" id="employeeID" name="employeeID" required>
+
       <input type="submit" value="Submit Ticket">
     </form>
   </div>

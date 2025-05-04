@@ -145,7 +145,7 @@ $conn->close();
         <div class="message error"><?= htmlspecialchars($error) ?></div>
     <?php endif; ?>
 
-    <a class="back-button" href="../html/registerNewUser.html">← Back to Registration Form</a>
+    <a class="back-button" href="../pages/registerNewUser.php">← Back to Registration Form</a>
 </div>
 
 </body>
