@@ -1,144 +1,63 @@
+
 <?php
 session_start();
-require_once 'template.php'; // Includes the database connection
+include 'template.php';
 
-$clients = [];
-$error = '';
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['userType'])) {
-    $sql = "SELECT ClientID, Name, Location FROM Client";
-    $stmt = $conn->prepare($sql);
-    if ($stmt && $stmt->execute()) {
-        $result = $stmt->get_result();
-        while ($row = $result->fetch_assoc()) {
-            $clients[] = $row;
-        }
-        $stmt->close();
-    } else {
-        $error = "Error retrieving clients. Please try again.";
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Set the number of records per page
+    $recordsPerPage = 10;
+
+    // Get the current page from the URL, default to 1 if not set
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+    // Calculate the offset for the query (page - 1) * records per page
+    $offset = ($page - 1) * $recordsPerPage;
+
+    // Get the total count of employees to calculate the total number of pages
+    $totalCountQuery = "SELECT COUNT(*) AS total FROM Client";
+    $totalCountResult = $conn->query($totalCountQuery);
+
+    if (!$totalCountResult) {
+        echo json_encode(['error' => 'Error fetching total client count: ' . $conn->error]);
+        exit;
     }
-} else {
-    $error = "Invalid request. Please provide an admin user type.";
+
+    $totalCountRow = $totalCountResult->fetch_assoc();
+    $totalCount = $totalCountRow['total'];
+
+    // Calculate the total number of pages
+    $totalPages = ceil($totalCount / $recordsPerPage);
+
+    // Prepare the query to get the employees for the current page
+    $sql = "SELECT ClientID, Name, Location FROM Client LIMIT ? OFFSET ?";
+    $stmt = $conn->prepare($sql);
+    if ($stmt) {
+        $stmt->bind_param("ii", $recordsPerPage, $offset); // bind parameters for LIMIT and OFFSET
+
+        // Execute the statement
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+            $clients = [];
+
+            // Fetch all rows
+            while ($row = $result->fetch_assoc()) {
+                $clients[] = $row;
+            }
+
+            // Return data as JSON
+            echo json_encode([
+                'data' => $clients,
+                'totalCount' => $totalCount,
+                'totalPages' => $totalPages
+            ]);
+        } else {
+            echo json_encode(['error' => 'Error executing query: ' . $stmt->error]);
+        }
+    } else {
+        echo json_encode(['error' => 'Error preparing the query: ' . $conn->error]);
+    }
+
+    // Close the connection
+    $conn->close();
 }
-$conn->close();
 ?>
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Client List</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #dde4ff;
-        }
-
-        .top-bar {
-            background-color: #fdf1dc;
-            display: flex;
-            align-items: center;
-            padding: 20px 40px;
-        }
-
-        .logo {
-            width: 40px;
-            margin-right: 20px;
-        }
-
-        .company-name {
-            font-size: 26px;
-            font-weight: bold;
-            color: #000;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 60px auto;
-            background-color: white;
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #000;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 30px;
-        }
-
-        table, th, td {
-            border: 1px solid #000;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: center;
-            color: #000;
-        }
-
-        th {
-            background-color: #a4d3f4;
-        }
-
-        .error {
-            color: red;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .back-button {
-            margin-top: 30px;
-            display: block;
-            text-align: center;
-            padding: 10px 20px;
-            background-color: #c9abd1;
-            color: #000;
-            border: 1px solid #000;
-            font-weight: bold;
-            border-radius: 6px;
-            text-decoration: none;
-        }
-
-        .back-button:hover {
-            background-color: #b89bc3;
-        }
-    </style>
-</head>
-<body>
-
-<div class="top-bar">
-    <img src="../images/ant.png" alt="Logo" class="logo">
-    <div class="company-name">ANT IT Company</div>
-</div>
-
-<div class="container">
-    <h1>Client List</h1>
-
-    <?php if (!empty($error)): ?>
-        <div class="error"><?= htmlspecialchars($error) ?></div>
-    <?php elseif (count($clients) === 0): ?>
-        <div class="error">No clients found.</div>
-    <?php else: ?>
-        <table>
-            <tr><th>Client ID</th><th>Name</th><th>Location</th></tr>
-            <?php foreach ($clients as $client): ?>
-                <tr>
-                    <td><?= htmlspecialchars($client['ClientID']) ?></td>
-                    <td><?= htmlspecialchars($client['Name'] ?? '') ?></td>
-                    <td><?= htmlspecialchars($client['Location'] ?? '') ?></td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    <?php endif; ?>
-
-    <a class="back-button" href="../pages/ClientMng.php">← Back to Client Management</a>
-</div>
-
-
-</body>
-</html>
