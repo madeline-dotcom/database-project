@@ -1,60 +1,132 @@
 <?php
 include 'template.php';
 
+$message = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve and trim input values
     $ticketNum = isset($_POST['ticketNum']) ? trim($_POST['ticketNum']) : null;
     $deviceType = isset($_POST['deviceType']) ? trim($_POST['deviceType']) : null;
     $serialNum = isset($_POST['serialNum']) ? trim($_POST['serialNum']) : null;
     $clientID = isset($_POST['clientID']) ? trim($_POST['clientID']) : null;
-
-    // Set the status to "Open"
+    $employeeID = isset($_POST['employeeID']) ? trim($_POST['employeeID']) : null;
     $status = "Open";
 
-    // Validate input
-    if (empty($ticketNum) || empty($deviceType) || empty($serialNum) || empty($clientID)) {
-        die("Error: All fields are required.");
-    }
-
-    if (!is_numeric($ticketNum) || !is_numeric($serialNum) || !is_numeric($clientID)) {
-        die("Error: Ticket Number, Serial Number, and Client ID must be valid numbers.");
-    }
-
-    // Check for duplicate TicketNum
-    $checkStmt = $conn->prepare("SELECT TicketNum FROM Ticket WHERE TicketNum = ?");
-    if ($checkStmt === false) {
-        die("Error: Failed to prepare the SQL statement. " . $conn->error);
-    }
-    $checkStmt->bind_param("i", $ticketNum);
-    $checkStmt->execute();
-    $checkStmt->store_result();
-
-    if ($checkStmt->num_rows > 0) {
-        die("Error: A ticket with Ticket Number $ticketNum already exists.");
-    }
-    $checkStmt->close();
-
-    // Prepare the SQL query
-    $stmt = $conn->prepare("INSERT INTO Ticket (TicketNum, DeviceType, SerialNum, ClientID, Status) 
-                            VALUES (?, ?, ?, ?, ?)");
-    if ($stmt === false) {
-        die("Error: Failed to prepare the SQL statement. " . $conn->error);
-    }
-
-    // Bind parameters
-    $stmt->bind_param("isiss", $ticketNum, $deviceType, $serialNum, $clientID, $status);
-
-    // Execute the query
-    if ($stmt->execute()) {
-        echo "Ticket submitted successfully!";
+    if (empty($ticketNum) || empty($deviceType) || empty($serialNum) || empty($clientID) || empty($employeeID)) {
+        $message = "Error: All fields are required.";
+    } elseif (!is_numeric($ticketNum) || !is_numeric($serialNum) || !is_numeric($clientID) || !is_numeric($employeeID)) {
+        $message = "Error: All fields must be valid numbers.";
     } else {
-        echo "Error: " . $stmt->error;
+        $checkStmt = $conn->prepare("SELECT TicketNum FROM Ticket WHERE TicketNum = ?");
+        if (!$checkStmt) {
+            $message = "Error: " . $conn->error;
+        } else {
+            $checkStmt->bind_param("i", $ticketNum);
+            $checkStmt->execute();
+            $checkStmt->store_result();
+
+            if ($checkStmt->num_rows > 0) {
+                $message = "Error: A ticket with Ticket Number $ticketNum already exists.";
+            } else {
+                $stmt = $conn->prepare("INSERT INTO Ticket (TicketNum, DeviceType, SerialNum, ClientID, EmployeeID, Status) 
+                                        VALUES (?, ?, ?, ?, ?, ?)");
+                if (!$stmt) {
+                    $message = "Error: " . $conn->error;
+                } else {
+                    $stmt->bind_param("isiiis", $ticketNum, $deviceType, $serialNum, $clientID, $employeeID, $status);
+                    if ($stmt->execute()) {
+                        $message = "Ticket submitted successfully!";
+                    } else {
+                        $message = "Error: " . $stmt->error;
+                    }
+                    $stmt->close();
+                }
+            }
+            $checkStmt->close();
+        }
     }
-
-    // Close the statement
-    $stmt->close();
+    $conn->close();
 }
-
-// Close the database connection
-$conn->close();
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Submit Ticket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #dde4ff;
+            margin: 0;
+            padding: 0;
+        }
+
+        .top-bar {
+            background-color: #fdf1dc;
+            display: flex;
+            align-items: center;
+            padding: 20px 40px;
+        }
+
+        .logo {
+            width: 40px;
+            margin-right: 20px;
+        }
+
+        .company-name {
+            font-size: 26px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 80px auto;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            border: 1px solid #000;
+        }
+
+        .message {
+            font-size: 22px;
+            font-weight: bold;
+            color: <?= (str_starts_with($message, "Ticket submitted")) ? "#006400" : "#B22222" ?>;
+            background-color: <?= (str_starts_with($message, "Ticket submitted")) ? "#e6ffe6" : "#ffe6e6" ?>;
+            padding: 20px;
+            border: 1px solid <?= (str_starts_with($message, "Ticket submitted")) ? "#006400" : "#B22222" ?>;
+            border-radius: 6px;
+        }
+
+        .back-button {
+            margin-top: 30px;
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #c9abd1;
+            color: #000;
+            border: 1px solid #000;
+            border-radius: 6px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: #b89bc3;
+        }
+    </style>
+</head>
+<body>
+<div class="top-bar">
+    <img src="../images/ant.png" alt="Logo" class="logo">
+    <div class="company-name">ANT IT Company</div>
+</div>
+
+<div class="container">
+    <?php if (!empty($message)): ?>
+        <div class="message"><?= htmlspecialchars($message) ?></div>
+    <?php endif; ?>
+    <a href="../html/TicketSubmission.html" class="back-button">← Back to Ticket Form</a>
+</div>
+</body>
+</html>

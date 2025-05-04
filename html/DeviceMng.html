@@ -124,33 +124,28 @@
       }
     }
   </style>
-  <script>
-    function validateForm() {
-      const date = document.getElementById("date").value.trim();
-      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-      if (!dateRegex.test(date)) {
-        alert("Purchase Date must be in the format YYYY-MM-DD.");
-        return false;
-      }
+<script>
+  function validateForm() {
+    const input = document.getElementById("addDate");
+    const selectedDate = input.valueAsDate;
 
-      const [year, month, day] = date.split("-").map(Number);
-      const isValidDate = (y, m, d) => {
-        const dateObj = new Date(y, m - 1, d);
-        return (
-          dateObj.getFullYear() === y &&
-          dateObj.getMonth() === m - 1 &&
-          dateObj.getDate() === d
-        );
-      };
-
-      if (!isValidDate(year, month, day)) {
-        alert("Purchase Date is not a valid calendar date.");
-        return false;
-      }
-
-      return true;
+    if (!selectedDate) {
+      alert("Purchase Date is required and must be a valid date.");
+      return false;
     }
-  </script>
+
+    // Format to YYYY-MM-DD
+    const yyyy = selectedDate.getFullYear();
+    const mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(selectedDate.getDate()).padStart(2, '0');
+    const formattedDate = `${yyyy}-${mm}-${dd}`;
+
+    // Set the value back in case the backend depends on it
+    input.value = formattedDate;
+
+    return true;
+  }
+</script>
 </head>
 <body>
 
@@ -186,15 +181,15 @@
     <div class="ticket-card">
       <h2>Add Device</h2>
       <form action="../php/newDevice.php" method="post" onsubmit="return validateForm()">
-        <label for="serial">Serial Num:</label>
-        <input type="number" id="serial" name="serial" required>
-
-        <label for="clientID">Client ID:</label>
-        <input type="number" id="clientID" name="clientID" required>
-
-        <label for="date">Purchase Date:</label>
-        <input type="date" id="date" name="date" placeholder="YYYY-MM-DD" required>
-
+        <label for="addSerial">Serial Num:</label>
+        <input type="number" id="addSerial" name="serial" required>
+    
+        <label for="addClientID">Client ID:</label>
+        <input type="number" id="addClientID" name="clientID" required>
+    
+        <label for="addDate">Purchase Date:</label>
+        <input type="date" id="addDate" name="date" placeholder="YYYY-MM-DD" required>
+    
         <label for="type">Device Type:</label>
         <select id="type" name="type" required>
           <option value="">--Select--</option>
@@ -202,10 +197,10 @@
           <option value="Printer">Printer</option>
           <option value="Server">Server</option>
         </select>
-
+    
         <input type="submit" value="Add">
       </form>
-    </div>
+    </div>    
 
     <div class="ticket-card">
       <h2>Remove Device</h2>
