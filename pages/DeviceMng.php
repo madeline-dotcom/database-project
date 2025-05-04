@@ -1,3 +1,21 @@
+<?php
+session_start();
+// Ensure the user is an admin or employee
+if (!isset($_SESSION['usertype']) || (strtolower($_SESSION['usertype']) !== 'admin' && strtolower($_SESSION['usertype']) !== 'employee')) {
+    header("Location: ../pages/Login.html");
+    exit();
+}
+// Determine home URL based on user type
+$homeUrl = '#'; // default
+switch (strtolower($_SESSION['usertype'])) {
+    case 'admin':
+        $homeUrl = 'adminPage.php';
+        break;
+    case 'employee':
+        $homeUrl = 'employee.php';
+        break;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,6 +55,20 @@
     .user-info span {
       font-size: 18px;
       color: #000;
+    }
+
+    .home-button {
+      padding: 8px 16px;
+      background-color: #a4d3f4;
+      color: #000;
+      border: 1px solid #000;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .home-button:hover {
+      background-color: #90c0e0;
     }
 
     .logout-button {
@@ -87,8 +119,8 @@
 
     input[type="text"],
     input[type="number"],
-    input[type="date"],
-    select {
+    select,
+    input[type="date"] {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
@@ -124,28 +156,6 @@
       }
     }
   </style>
-<script>
-  function validateForm() {
-    const input = document.getElementById("addDate");
-    const selectedDate = input.valueAsDate;
-
-    if (!selectedDate) {
-      alert("Purchase Date is required and must be a valid date.");
-      return false;
-    }
-
-    // Format to YYYY-MM-DD
-    const yyyy = selectedDate.getFullYear();
-    const mm = String(selectedDate.getMonth() + 1).padStart(2, '0');
-    const dd = String(selectedDate.getDate()).padStart(2, '0');
-    const formattedDate = `${yyyy}-${mm}-${dd}`;
-
-    // Set the value back in case the backend depends on it
-    input.value = formattedDate;
-
-    return true;
-  }
-</script>
 </head>
 <body>
 
@@ -154,11 +164,13 @@
     <div class="company-name">ANT IT Company</div>
     <div class="user-info">
       <span>Device Management</span>
+      <button class="home-button" onclick="location.href='<?php echo $homeUrl; ?>'">Home</button>
     </div>
   </div>
 
   <div class="card-container">
 
+    <!-- View Devices -->
     <div class="ticket-card">
       <h2>View Devices</h2>
       <form action="../php/viewDevice.php" method="post">
@@ -169,7 +181,7 @@
         <input type="number" id="clientID" name="clientID">
 
         <label for="date">Purchase Date:</label>
-        <input type="date" id="date" name="date" placeholder="YYYY-MM-DD" required>
+        <input type="date" id="date" name="date">
 
         <input type="checkbox" id="notRecent" name="notRecent" value="1">
         <label for="notRecent">Not Worked on Recently (Past Month)</label>
@@ -178,18 +190,19 @@
       </form>
     </div>
 
+    <!-- Add Device -->
     <div class="ticket-card">
       <h2>Add Device</h2>
-      <form action="../php/newDevice.php" method="post" onsubmit="return validateForm()">
-        <label for="addSerial">Serial Num:</label>
-        <input type="number" id="addSerial" name="serial" required>
-    
-        <label for="addClientID">Client ID:</label>
-        <input type="number" id="addClientID" name="clientID" required>
-    
-        <label for="addDate">Purchase Date:</label>
-        <input type="date" id="addDate" name="date" placeholder="YYYY-MM-DD" required>
-    
+      <form action="../php/newDevice.php" method="post">
+        <label for="serial">Serial Num:</label>
+        <input type="number" id="serial" name="serial" required>
+
+        <label for="clientID">Client ID:</label>
+        <input type="number" id="clientID" name="clientID" required>
+
+        <label for="date">Purchase Date:</label>
+        <input type="date" id="date" name="date" required>
+
         <label for="type">Device Type:</label>
         <select id="type" name="type" required>
           <option value="">--Select--</option>
@@ -197,11 +210,12 @@
           <option value="Printer">Printer</option>
           <option value="Server">Server</option>
         </select>
-    
+
         <input type="submit" value="Add">
       </form>
-    </div>    
+    </div>
 
+    <!-- Remove Device -->
     <div class="ticket-card">
       <h2>Remove Device</h2>
       <form action="../php/removeDevice.php" method="post">
@@ -213,7 +227,16 @@
 
   </div>
 
-  <button class="logout-button" onclick="document.location='Login.html'">LOGOUT</button>
+  <button class="logout-button" onclick="document.location='../php/logout.php'">LOGOUT</button>
+
+  <script>
+    // Force reload from server when page is restored via back/forward navigation
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
+  </script>
 
 </body>
 </html>

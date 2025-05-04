@@ -1,6 +1,10 @@
 <?php
 session_start();
-$client_name = $_SESSION['client_name'] ?? 'Client';
+if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'client') {
+    header("Location: Login.html");
+    exit();
+}
+$username = $_SESSION['username'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -107,6 +111,9 @@ $client_name = $_SESSION['client_name'] ?? 'Client';
 <div class="top-bar">
   <img src="../images/ant.png" alt="Logo" class="logo">
   <div class="company-name">ANT IT Company</div>
+  <div class="welcome-message" style="margin-left: auto; font-size: 18px; font-weight: bold; color: #000;">
+    Welcome, <?php echo htmlspecialchars($username); ?>
+  </div>
 </div>
 
 <div class="card-container">
@@ -115,7 +122,7 @@ $client_name = $_SESSION['client_name'] ?? 'Client';
       <img src="../images/ticketSubmission.png" alt="Submit Ticket Icon">
     </div>
     <div class="card-bottom">
-      <h3><a href="TicketSubmission.html">Submit a Ticket</a></h3>
+      <h3><a href="TicketSubmission.php">Submit a Ticket</a></h3>
       <p>Allows a client to file a ticket; needs to enter clientID, device type, device serial number. <br> Tickets are open.</p>
     </div>
   </div>
@@ -125,13 +132,22 @@ $client_name = $_SESSION['client_name'] ?? 'Client';
       <img src="../images/myTicket.png" alt="My Tickets Icon">
     </div>
     <div class="card-bottom">
-      <h3><a href="myTicketsClient.html">My Tickets</a></h3>
+      <h3><a href="myTicketsClient.php">My Tickets</a></h3>
       <p>Allows the clients to enter their ID and view all their tickets</p>
     </div>
   </div>
 </div>
 
-<button class="logout-button" onclick="document.location='Login.html'">LOGOUT</button>
+<button class="logout-button" onclick="document.location='../php/logout.php'">LOGOUT</button>
+
+<script>
+  // Reload page if restored from back/forward cache (after logout)
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
+</script>
 
 </body>
 </html>

@@ -2,6 +2,9 @@
 include 'template.php';
 session_start();
 
+header("Cache-Control: no-store, no-cache, must-revalidate");
+header("Expires: 0");
+
 // Get form input
 $username = trim($_POST['username'] ?? '');
 $password = trim($_POST['password'] ?? '');
@@ -9,29 +12,36 @@ $password = trim($_POST['password'] ?? '');
 // Validate input
 if (empty($username) || empty($password)) {
     echo "<h2>Username and password are required</h2>";
-    echo "<a href='../html/login.html'>Try again</a>";
+    echo "<a href='../pages/login.html'>Try again</a>";
     exit();
 }
-//Perform a select query on users to see if a user with the username and password exists
+
+// Query for user
 $stmt = $conn->prepare("SELECT * FROM Users WHERE Username = ? AND Password = ?");
 if ($stmt) {
     $stmt->bind_param("ss", $username, $password);
     $stmt->execute();
     $result = $stmt->get_result();
+
     if ($result->num_rows > 0) {
-        // User exists
         $row = $result->fetch_assoc();
         $userType = $row['UserType'];
-        // Redirect based on UserType
+
+        // Set session variables
+        $_SESSION['usertype'] = $userType;
+        $_SESSION['username'] = $username;
+
+
+        // Redirect by user type
         switch (strtolower($userType)) {
             case 'admin':
-                header("Location: http://localhost:8000/html/adminPage.html");
+                header("Location: ../pages/adminPage.php");
                 break;
             case 'client':
-                header("Location: http://localhost:8000/html/client.html");
+                header("Location: ../pages/client.php");
                 break;
             case 'employee':
-                header("Location: http://localhost:8000/html/employee.html");
+                header("Location: ../pages/employee.php");
                 break;
             default:
                 echo "<h2>Unknown user type: $userType</h2>";
@@ -39,11 +49,12 @@ if ($stmt) {
         }
     } else {
         echo "<h2>Invalid username or password</h2>";
-        echo "<a href='../html/login.html'>Try again</a>";
+        echo "<a href='../pages/login.php'>Try again</a>";
     }
     $stmt->close();
 } else {
     echo "Database prepare failed: " . $conn->error;
 }
+
 $conn->close();
 ?>

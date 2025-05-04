@@ -17,13 +17,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Redirect based on role
         switch ($row['UserType']) {
             case 'Admin':
-                header("Location: ../html/adminPage.html");
+                header("Location: ../pages/adminPage.html");
                 break;
             case 'Employee':
-                header("Location: ../html/employee.html");
+                header("Location: ../pages/employee.html");
                 break;
             default:
-                header("Location: ../html/client.html");
+                header("Location: ../pages/client.html");
                 break;
         }
         exit();

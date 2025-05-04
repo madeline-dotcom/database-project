@@ -1,3 +1,21 @@
+<?php
+session_start();
+// Ensure the user is an admin, or redirect them to the login page
+if (!isset($_SESSION['usertype']) || (strtolower($_SESSION['usertype']) !== 'admin' && strtolower($_SESSION['usertype']) !== 'employee')) {
+    header("Location: ../pages/Login.html");
+    exit();
+}
+// Determine home URL based on user type
+$homeUrl = '#'; // default
+switch (strtolower($_SESSION['usertype'])) {
+    case 'admin':
+        $homeUrl = 'adminPage.php';
+        break;
+    case 'employee':
+        $homeUrl = 'employee.php';
+        break;
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,6 +50,20 @@
         .user-info span {
             font-size: 18px;
             color: #000;
+        }
+
+        .home-button {
+        padding: 8px 16px;
+        background-color: #a4d3f4;
+        color: #000;
+        border: 1px solid #000;
+        border-radius: 4px;
+        font-weight: bold;
+        cursor: pointer;
+        }
+
+        .home-button:hover {
+        background-color: #90c0e0;
         }
 
         .logout-button {
@@ -125,6 +157,7 @@
     <div class="company-name">ANT IT Company</div>
     <div class="user-info">
         <span>Ticket History</span>
+        <button class="home-button" onclick="location.href='<?php echo $homeUrl; ?>'">Home</button>
     </div>
 </div>
 
@@ -178,7 +211,16 @@
     </div>
 </div>
 
-<button class="logout-button" onclick="document.location='Login.html'">LOGOUT</button>
+<button class="logout-button" onclick="document.location='../php/logout.php'">LOGOUT</button>
+
+<script>
+  // Reload page if restored from back/forward cache (after logout)
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
+</script>
 
 </body>
 </html>

@@ -1,3 +1,11 @@
+<?php
+session_start();
+// Ensure the user is an admin, or redirect them to the login page
+if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'admin') {
+    header("Location: ../pages/Login.html");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -134,7 +142,7 @@
     <div class="company-name">ANT IT Company</div>
     <div class="user-info">
       <span>Register</span>
-      <button class="home-button" onclick="document.location='adminPage.html'">Home</button>
+      <button class="home-button" onclick="document.location='adminPage.php'">Home</button>
     </div>
   </div>
 
@@ -162,7 +170,16 @@
     </form>
   </div>
 
-  <button class="logout-button" onclick="document.location='Login.html'">LOGOUT</button>
+  <button class="logout-button" onclick="document.location='../php/logout.php'">LOGOUT</button>
+
+  <script>
+  // Reload page if restored from back/forward cache (after logout)
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
+</script>
 
 </body>
 </html>

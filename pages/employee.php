@@ -1,6 +1,10 @@
 <?php
 session_start();
-$username = $_SESSION['name'] ?? 'User';
+if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'employee') {
+    header("Location: Login.html");
+    exit();
+}
+$username = $_SESSION['username'] ?? 'User';
 ?>
 <!DOCTYPE html>
 <html>
@@ -107,26 +111,36 @@ $username = $_SESSION['name'] ?? 'User';
 <div class="top-bar">
   <img src="../images/ant.png" alt="Logo" class="logo">
   <div class="company-name">ANT IT Company</div>
+  <div class="welcome-message" style="margin-left: auto; font-size: 18px; font-weight: bold; color: #000;">
+    Welcome, <?php echo htmlspecialchars($username); ?>
+  </div>
 </div>
 
-<div class="welcome">Welcome, <?php echo htmlspecialchars($username); ?></div>
-
 <div class="card-container">
-  <div class="card ticket-history" onclick="document.location='TicketHistory.html'">
+  <div class="card ticket-history" onclick="document.location='TicketHistory.php'">
     <h3>Ticket History</h3>
     <p>You can search ticket; view all tickets or find one you want to work on.<br>You can also start new ticket.</p>
   </div>
-  <div class="card my-tickets" onclick="document.location='myTickets.html'">
+  <div class="card my-tickets" onclick="document.location='myTickets.php'">
     <h3>My Tickets</h3>
     <p>See the tickets assigned to you.<br>Close ticket once completed.</p>
   </div>
-  <div class="card devices" onclick="document.location='DeviceMng.html'">
+  <div class="card devices" onclick="document.location='DeviceMng.php'">
     <h3>Devices</h3>
     <p>View devices, look up any device,<br>Add device to the system,<br>Remove device from the system.</p>
   </div>
 </div>
 
-<button class="logout-button" onclick="document.location='Login.html'">LOGOUT</button>
+<button class="logout-button" onclick="document.location='../php/logout.php'">LOGOUT</button>
+
+<script>
+  // Reload page if restored from back/forward cache (after logout)
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
+</script>
 
 </body>
 </html>
