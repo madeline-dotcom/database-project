@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $checkStmt->close();
 
     // Insert client
-    $stmt = $conn->prepare("INSERT INTO Client (ClientID, Name, LocationName) VALUES (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO Client (ClientID, Name, Location) VALUES (?, ?, ?)");
     if (!$stmt) {
         echo json_encode(["status" => "error", "message" => "Database error: " . $conn->error]);
         exit;

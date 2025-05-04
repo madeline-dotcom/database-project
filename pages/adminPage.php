@@ -1,41 +1,54 @@
 <?php
 session_start();
+include '../php/template.php';
 if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'admin') {
     header("Location: Login.html");
     exit();
 }
 $username = $_SESSION['username'];
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Page</title>
+  <title>Admin Dashboard</title>
   <style>
     body {
       margin: 0;
-      font-family: Open Source;
+      font-family: Arial, sans-serif;
       background-color: #dbe4ff;
-      position: relative;
-      min-height: 100vh;
     }
 
-    .header {
+    .top-bar {
       background-color: #fdf1dc;
       display: flex;
       align-items: center;
       padding: 20px 40px;
     }
 
-    .header img {
-      height: 50px;
+    .logo {
+      width: 40px;
       margin-right: 20px;
     }
 
-    .header h1 {
-      font-size: 24px;
+    .company-name {
+      font-size: 26px;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .welcome-message {
+      margin-left: auto;
+      font-size: 18px;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .welcome-heading {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 32px;
+      color: #000;
       font-weight: bold;
     }
 
@@ -43,80 +56,107 @@ $username = $_SESSION['username'];
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
-      padding: 40px;
-      padding-bottom: 100px; /* extra space to not overlap logout */
+      padding: 40px 60px 120px;
+      justify-items: center;
     }
 
     .tile {
-      border-radius: 20px;
-      padding: 30px;
+      width: 100%;
+      max-width: 300px;
+      height: 160px;
+      border-radius: 12px;
+      padding: 20px;
       text-align: center;
-      font-size: 35px;
+      font-size: 20px;
       text-decoration: underline;
-      font-weight: normal;
+      font-weight: bold;
       box-shadow: 0 0 8px rgba(0,0,0,0.2);
       cursor: pointer;
-      transition: all 0.3s ease; /* Smooth transition for shadow and scaling */
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
 
     .tile img {
-      width: 100px;
-      height: 100px;
-      margin-bottom: 20px;
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 10px;
     }
 
-    /* Tile Color Classes */
-    .tile.employee { background-color: #d4b8d6; height: 160px; }
-    .tile.client   { background-color: #9dc9f2; height: 160px; } 
-    .tile.device   { background-color: #fdf1dc; height: 160px; }
+    /* Tile colors */
+    .employee { background-color: #d4b8d6; }
+    .client   { background-color: #9dc9f2; }
+    .device   { background-color: #fdf1dc; }
+    .register { background-color: #9dc9f2; }
+    .submit   { background-color: #fdf1dc; }
+    .history  { background-color: #d4b8d6; }
 
-    .tile.register { background-color: #9dc9f2; height: 160px; }
-    .tile.submit   { background-color: #fdf1dc; height: 160px; }
-    .tile.history  { background-color: #d4b8d6; height: 160px; }
-
-    /* Hover Effect for Tiles */
     .tile:hover {
-      transform: scale(1.05); /* Slight scaling effect */
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* Stronger shadow on hover */
+      transform: scale(1.05);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
     }
 
-    .logout-btn {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      padding: 10px 30px;
-      font-size: 16px;
-      border: 2px solid black;
-      background: white;
+    .logout-button {
+      position: absolute;
+      right: 40px;
+      bottom: 40px;
+      padding: 10px 20px;
+      background-color: #dde4ff;
+      color: #000;
+      border: 1px solid #000;
+      font-weight: bold;
       cursor: pointer;
+    }
+
+    .logout-button:hover {
+      background-color: #ccc;
     }
   </style>
 </head>
 <body>
 
-  <div class="header">
-    <img src="../images/ant.png" alt="Ant Logo">
-    <h1>ANT IT Company</h1>
-    <div class="welcome-message" style="margin-left: auto; font-size: 18px; font-weight: bold; color: #000;">
-    Welcome, <?php echo htmlspecialchars($username); ?>
+  <div class="top-bar">
+    <img src="../images/ant.png" alt="Logo" class="logo">
+    <div class="company-name">ANT IT Company</div>
+    <div class="welcome-message">
+      UserID: <?php 
+        $stmt = $conn->prepare("SELECT userID FROM users WHERE username = ?");
+        if (!$stmt) {
+            echo "Database error: " . $conn->error;
+            exit;
+        }
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->bind_result($userID);
+        $stmt->fetch();
+        $stmt->close();
+        $_SESSION['userID'] = $userID;
+        echo htmlspecialchars($userID);
+      ?>
     </div>
   </div>
 
+  <h1 class="welcome-heading">Welcome, <?php echo htmlspecialchars($username); ?></h1>
+
   <div class="grid-container">
+
     <div class="tile employee" onclick="location.href='EmployeeMng.php'">
-        <img src="../images/employeeMng.png" alt="Employee Mng Icon">
-        <div>Employee Management</div>
-    </div>   
+      <img src="../images/employeeMng.png" alt="Employee Mng Icon">
+      <div>Employee Management</div>
+    </div>
 
     <div class="tile client" onclick="location.href='ClientMng.php'">
-        <img src="../images/clientMng.png" alt="Client Mng Icon">
-        <div>Client Management</div>
-    </div>    
+      <img src="../images/clientMng.png" alt="Client Mng Icon">
+      <div>Client Management</div>
+    </div>
 
     <div class="tile device" onclick="location.href='DeviceMng.php'">
-        <img src="../images/devices.png" alt="Devices Icon">
-        <div>Devices</div>
-    </div>    
+      <img src="../images/devices.png" alt="Devices Icon">
+      <div>Devices</div>
+    </div>
 
     <div class="tile register" onclick="location.href='registerNewUser.php'">
       <img src="../images/registerNewUser.png" alt="Register Icon">
@@ -132,17 +172,18 @@ $username = $_SESSION['username'];
       <img src="../images/ticketHistory.png" alt="Ticket Icon">
       <div>Ticket History</div>
     </div>
+
   </div>
 
-  <button class="logout-btn" onclick="document.location='../php/logout.php'">LOGOUT</button>
+  <button class="logout-button" onclick="document.location='../php/logout.php'">LOGOUT</button>
 
   <script>
-  // Reload page if restored from back/forward cache (after logout)
-  window.addEventListener('pageshow', function (event) {
-    if (event.persisted) {
-      window.location.reload();
-    }
-  });
+    // Reload page if restored from back/forward cache (after logout)
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
   </script>
 
 </body>

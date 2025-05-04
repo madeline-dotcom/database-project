@@ -1,5 +1,6 @@
 <?php
 session_start();
+include '../php/template.php';
 if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'employee') {
     header("Location: Login.html");
     exit();
@@ -43,92 +44,94 @@ $username = $_SESSION['username'] ?? 'User';
       color: #000;
     }
 
-    .content {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: calc(100vh - 120px); /* Full height minus top bar */
+    .welcome-heading {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 32px;
+      color: #000;
+      font-weight: bold;
     }
 
     .card-container {
       display: flex;
       justify-content: center;
-      align-items: center;
       gap: 60px;
+      margin-top: 60px;
       flex-wrap: nowrap;
     }
 
     .card {
-      width: 350px;
-      height: 300px;
-      padding: 20px;
+      width: 400px;
+      height: 500px;
+      border: 1px solid #000;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      border: 3px solid #000;
-      background-color: #fff;
-      box-sizing: border-box;
+      overflow: hidden;
       text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background-color: #fff;
     }
-
 
     .card:hover {
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-      transform: scale(1.05);
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
+      transform: translateY(-5px);
+      cursor: pointer;
     }
-
-    .card h3 {
-      margin: 10px 0 10px;
-      font-size: 24px;
-      text-decoration: underline;
-      color: #000;
-      font-weight: 700;
-    }
-
 
     .card-top {
-      flex: 1;
+      flex: 3; /* 75% of the card height */
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 10px;
+      padding: 0;
     }
 
-
     .card-top img {
-      max-height: 100%;
-      max-width: 100%;
+      width: 75%;
+      height: 75%;
       object-fit: contain;
     }
 
+    .card-bottom {
+      flex: 1; /* 25% of height */
+      padding: 20px;
+      border-top: 1px solid #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
 
-    .card p {
+    .card-bottom h3 {
+      margin: 0 0 10px 0;
+      font-size: 22px;
+      color: #000;
+      text-decoration: underline;
+    }
+
+    .card-bottom p {
+      margin: 0;
       font-size: 16px;
       color: #000;
-      margin: 0;
       line-height: 1.4;
     }
 
-    /* Specific card colors */
-    .card.ticket-history {
+    .ticket-history {
       background-color: #c9abd1;
     }
 
-    .card.my-tickets {
+    .my-tickets {
       background-color: #a4d3f4;
     }
 
-    .card.devices {
+    .devices {
       background-color: #fdf1dc;
     }
-
     .device-img {
-      width: 180px;
-      height: auto;
+      margin-left: 45px;
+      width: 75%;
+      height: 75%;
       object-fit: contain;
-      margin-left: 25px;
     }
 
     .logout-button {
@@ -153,53 +156,64 @@ $username = $_SESSION['username'] ?? 'User';
   <div class="top-bar">
     <img src="../images/ant.png" alt="Logo" class="logo">
     <div class="company-name">ANT IT Company</div>
-    <div class="welcome-message">Welcome, <?php echo htmlspecialchars($username); ?></div>
+    <div class="welcome-message">
+      <?php 
+        // Fetch and display employee ID
+        $stmt = $conn->prepare("SELECT userID FROM users WHERE username = ?");
+        if (!$stmt) {
+            echo "Database error: " . $conn->error;
+            exit;
+        }
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->bind_result($employeeID);
+        $stmt->fetch();
+        $stmt->close();
+        $_SESSION['employeeID'] = $employeeID;
+        echo "EmployeeID: " . htmlspecialchars($employeeID);
+      ?>
+    </div>
   </div>
 
-  <main class="content">
-    <div class="card-container">
+  <h1 class="welcome-heading">Welcome, <?php echo htmlspecialchars($username); ?></h1>
 
-      <div class="card ticket-history" onclick="document.location='TicketHistory.php'">
-        <div class="card-top">
-          <img src="../images/ticketHistory.png" alt="Ticket History Icon">
-        </div>
+  <div class="card-container">
+
+    <div class="card ticket-history" onclick="document.location='TicketHistory.php'">
+      <div class="card-top">
+        <img src="../images/ticketHistory.png" alt="Ticket History Icon">
+      </div>
+      <div class="card-bottom">
         <h3>Ticket History</h3>
-        <p>
-          You can search tickets, view all tickets, or find the ones you want to work on.<br>
-          You can also start new tickets.
-        </p>
+        <p>You can search, view, and start tickets as needed for support.</p>
       </div>
-
-      <div class="card my-tickets" onclick="document.location='myTickets.php'">
-        <div class="card-top">
-          <img src="../images/myTicket.png" alt="My Tickets Icon">
-        </div>
-        <h3>My Tickets</h3>
-        <p>
-          See the tickets assigned to you.<br>
-          Close the ticket once completed.
-        </p>
-      </div>
-
-      <div class="card devices" onclick="document.location='DeviceMng.php'">
-        <div class="card-top">
-          <img src="../images/devices.png" alt="Devices Icon" class="device-img">
-        </div>
-        <h3>Devices</h3>
-        <p>
-          View devices, look up any device,<br>
-          Add device to the system,<br>
-          Remove device from the system.
-        </p>
-      </div>
-
     </div>
-  </main>
+
+    <div class="card my-tickets" onclick="document.location='myTickets.php'">
+      <div class="card-top">
+        <img src="../images/myTicket.png" alt="My Tickets Icon">
+      </div>
+      <div class="card-bottom">
+        <h3>My Tickets</h3>
+        <p>Review and close the tickets currently assigned to you.</p>
+      </div>
+    </div>
+
+    <div class="card devices" onclick="document.location='DeviceMng.php'">
+      <div class="card-top">
+      <img src="../images/devices.png" alt="Devices Icon" class="device-img">
+      </div>
+      <div class="card-bottom">
+        <h3>Devices</h3>
+        <p>Search, add, or remove devices in the system.</p>
+      </div>
+    </div>
+
+  </div>
 
   <button class="logout-button" onclick="document.location='../php/logout.php'">LOGOUT</button>
 
   <script>
-    // Reload page if restored from back/forward cache (after logout)
     window.addEventListener('pageshow', function (event) {
       if (event.persisted) {
         window.location.reload();

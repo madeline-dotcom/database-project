@@ -1,5 +1,6 @@
 <?php
 session_start();
+include '../php/template.php';
 if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'client') {
     header("Location: Login.html");
     exit();
@@ -132,6 +133,15 @@ $username = $_SESSION['username'];
     .logout-button:hover {
       background-color: #ccc;
     }
+
+    .welcome-heading {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 32px;
+      color: #000;
+      font-weight: bold;
+    }
+
   </style>
 </head>
 <body>
@@ -140,10 +150,26 @@ $username = $_SESSION['username'];
   <img src="../images/ant.png" alt="Logo" class="logo">
   <div class="company-name">ANT IT Company</div>
   <div class="welcome-message">
-    Welcome, <?php echo htmlspecialchars($username); ?>
+    ClientID: <?php 
+        // Get the userId from the users table based on the username
+        $stmt = $conn->prepare("SELECT userID FROM users WHERE username = ?");
+        if (!$stmt) {
+            echo "Database error: " . $conn->error;
+            exit;
+        }
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->bind_result($clientID);
+        $stmt->fetch();
+        $stmt->close();
+        // Store the clientID in the session
+        $_SESSION['clientID'] = $clientID;
+        // Display the clientID
+        echo htmlspecialchars($clientID);
+    ?>
   </div>
 </div>
-
+<h1 class="welcome-heading">Welcome, <?php echo htmlspecialchars($username); ?></h1>
 <div class="card-container">
   <a href="TicketSubmission.php" class="card-link">
     <div class="card submit">

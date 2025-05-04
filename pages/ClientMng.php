@@ -283,7 +283,7 @@ if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'admi
         <tr>
           <td>${client.ClientID}</td>
           <td>${client.Name}</td>
-          <td>${client.LocationName}</td>
+          <td>${client.Location}</td>
         </tr>
       `).join('');
               document.getElementById('clientTable').innerHTML = `
