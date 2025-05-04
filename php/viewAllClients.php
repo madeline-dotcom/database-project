@@ -5,7 +5,7 @@ require_once 'template.php'; // Includes the database connection
 $clients = [];
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['userType'])) {
-    $sql = "SELECT ClientID, Name FROM Client";
+    $sql = "SELECT ClientID, Name, LocationName FROM Client";
     $stmt = $conn->prepare($sql);
     if ($stmt && $stmt->execute()) {
         $result = $stmt->get_result();
@@ -125,11 +125,12 @@ $conn->close();
         <div class="error">No clients found.</div>
     <?php else: ?>
         <table>
-            <tr><th>Client ID</th><th>Name</th></tr>
+            <tr><th>Client ID</th><th>Name</th><th>Location</th></tr>
             <?php foreach ($clients as $client): ?>
                 <tr>
                     <td><?= htmlspecialchars($client['ClientID']) ?></td>
                     <td><?= htmlspecialchars($client['Name'] ?? '') ?></td>
+                    <td><?= htmlspecialchars($client['LocationName'] ?? '') ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>
