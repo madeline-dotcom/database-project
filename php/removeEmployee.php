@@ -1,59 +1,131 @@
 <?php
-include 'template.php'; 
+include 'template.php';
 
-// Check if the request method is POST
+$message = "";
+$error = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve the submitted employee ID from the form
     $employeeID = $_POST['employeeID'];
 
-    // Ensure the input is a valid numeric value before proceeding
     if (is_numeric($employeeID)) {
-        //check if the employee is assigned to any tickets
         $checkStmt = $conn->prepare("SELECT COUNT(*) FROM Ticket WHERE EmployeeID = ?");
-        // Bind the employee ID as an integer parameter
         $checkStmt->bind_param("i", $employeeID);
-        // Execute the prepared statement
         if ($checkStmt->execute()) {
-            // Fetch the result
             $checkStmt->bind_result($count);
             $checkStmt->fetch();
-            // Close the statement
             $checkStmt->close();
-            // If the employee is assigned to tickets, do not allow deletion
             if ($count > 0) {
-                echo "Cannot remove employee. They are assigned to tickets.";
-                exit;
-            }
-        } else {
-            // Output error if execution fails
-            echo "Error: " . $checkStmt->error;
-            exit;
-        }
-        
-        // Prepare a SQL DELETE statement to safely remove the employee
-        $stmt = $conn->prepare("DELETE FROM Employee WHERE EmployeeID = ?");
-        // Bind the employee ID as an integer parameter
-        $stmt->bind_param("i", $employeeID);
-
-        // Execute the prepared statement
-        if ($stmt->execute()) {
-            if ($stmt->affected_rows > 0) {
-                echo "Employee removed successfully.";
+                $error = "Cannot remove employee. They are assigned to tickets.";
             } else {
-                echo "No employee found with that ID.";
+                $stmt = $conn->prepare("DELETE FROM Employee WHERE EmployeeID = ?");
+                $stmt->bind_param("i", $employeeID);
+                if ($stmt->execute()) {
+                    if ($stmt->affected_rows > 0) {
+                        $message = "Employee removed successfully.";
+                    } else {
+                        $error = "No employee found with that ID.";
+                    }
+                } else {
+                    $error = "Error: " . $stmt->error;
+                }
+                $stmt->close();
             }
         } else {
-            // Output error if execution fails
-            echo "Error: " . $stmt->error;
+            $error = "Error: " . $checkStmt->error;
         }
-
-        // Close the prepared statement to free resources
-        $stmt->close();
     } else {
-        // Handle invalid input
-        echo "Invalid Employee ID.";
+        $error = "Invalid Employee ID.";
     }
 }
 
 $conn->close();
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Remove Employee Result</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #dde4ff;
+            font-family: Arial, sans-serif;
+        }
+
+        .top-bar {
+            background-color: #fdf1dc;
+            display: flex;
+            align-items: center;
+            padding: 20px 40px;
+        }
+
+        .logo {
+            width: 40px;
+            margin-right: 20px;
+        }
+
+        .company-name {
+            font-size: 26px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .content {
+            margin: 80px auto;
+            width: 50%;
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .message {
+            font-size: 20px;
+            color: green;
+            font-weight: bold;
+        }
+
+        .error {
+            font-size: 20px;
+            color: red;
+            font-weight: bold;
+        }
+
+        .back-button {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #a4d3f4;
+            color: #000;
+            font-weight: bold;
+            border: 1px solid #000;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            background-color: #90c0e0;
+        }
+    </style>
+</head>
+<body>
+
+<div class="top-bar">
+    <img src="../images/ant.png" alt="Logo" class="logo">
+    <div class="company-name">ANT IT Company</div>
+</div>
+
+<div class="content">
+    <?php if ($message): ?>
+        <div class="message"><?php echo $message; ?></div>
+    <?php elseif ($error): ?>
+        <div class="error"><?php echo $error; ?></div>
+    <?php endif; ?>
+
+    <a class="back-button" href="../html/EmployeeMng.html">← Back to Employee Management</a>
+</div>
+
+</body>
+</html>
