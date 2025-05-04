@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Employee Management</title>
   <style>
@@ -131,8 +132,107 @@
         width: 90%;
       }
     }
+
+    .employee-table-wrapper {
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 20px;
+      border: 1px solid #000;
+      border-radius: 8px;
+      background-color: white;
+    }
+
+    .employee-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 16px;
+    }
+
+    .employee-table thead {
+      background-color: #c9abd1;
+      color: #000;
+      position: sticky;
+      top: 0;
+    }
+
+    .employee-table th,
+    .employee-table td {
+      padding: 12px 16px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+
+    .employee-table tbody tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    .employee-table tbody tr:hover {
+      background-color: #e9e9ff;
+    }
+
+    .employee-list-section {
+      width: 40%;
+      float: left;
+      padding: 20px;
+    }
+
+    #employeeTable table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    #employeeTable th,
+    #employeeTable td {
+      padding: 12px 16px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    #employeeTable tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+
+    #paginationControls {
+      margin-top: 10px;
+      text-align: left;
+    }
+
+    .pagination-button {
+      margin-right: 10px;
+      padding: 6px 12px;
+      background-color: #c9abd1;
+      border: 1px solid #000;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .pagination-button:hover {
+      background-color: #b89bc3;
+    }
+
+    .main-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 40px;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .employee-list-section {
+      flex: 1;
+      padding: 20px;
+    }
+
+    .forms-section {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
   </style>
 </head>
+
 <body>
 
   <div class="top-bar">
@@ -145,41 +245,161 @@
   </div>
 
   <div class="card-container">
+    <div class="main-content">
 
-    <div class="form-card">
-      <h2>View Employees</h2>
-      <form action="../php/viewAllEmployees.php" method="post">
-        <input type="hidden" name="userType" value="admin">
-        <input type="submit" value="View All Employees">
-      </form>
+      <div class="employee-list-section">
+        <div class="form-card">
+        <h2>Employee List</h2>
+        <div id="employeeTable"></div>
+        <div id="paginationControls"></div>
+      </div>
+      </div>
+
+      <script>
+        let currentPage = 1;
+        const recordsPerPage = 10;
+
+        function loadEmployees(page = 1) {
+          fetch(`../php/viewAllEmployees.php?page=${page}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.error) {
+                console.error(data.error);
+                document.getElementById('employeeTable').innerHTML = '<p>Error loading data.</p>';
+                return;
+              }
+
+              const employees = data.data;
+              const totalCount = data.totalCount;
+              const totalPages = data.totalPages;
+
+              // Update the table with the employee data
+              const tableHtml = employees.map(employee => `
+        <tr>
+          <td>${employee.Name}</td>
+          <td>${employee.EmployeeID}</td>
+        </tr>
+      `).join('');
+              document.getElementById('employeeTable').innerHTML = `
+        <table class="employee-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Employee ID</th>
+            </tr>
+          </thead>
+          <tbody>${tableHtml}</tbody>
+        </table>
+      `;
+
+              // Update pagination controls
+              let paginationHtml = '';
+              for (let i = 1; i <= totalPages; i++) {
+                paginationHtml += `<button class="pagination-button" onclick="loadEmployees(${i})">${i}</button>`;
+              }
+              document.getElementById('paginationControls').innerHTML = paginationHtml;
+            })
+            .catch(error => {
+              console.error('Error loading employee table:', error);
+              document.getElementById('employeeTable').innerHTML = '<p>Error loading data.</p>';
+            });
+        }
+
+        // Load employees on page load
+        window.onload = function () {
+          loadEmployees(currentPage);
+        };
+
+      </script>
+
+
+
+      <div class="forms-section">
+        <!-- Add Employee Form (Top) -->
+        <div class="form-card">
+          <h2>Add Employee</h2>
+          <form id="addEmployeeForm" action="../php/newEmployee.php" method="post">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="employeeID">Employee ID:</label>
+            <input type="number" id="employeeID" name="employeeID" required>
+
+            <input type="submit" value="Submit">
+          </form>
+        </div>
+
+        <script>
+          document.getElementById('addEmployeeForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent default form submission
+
+            const form = e.target;
+            const formData = new FormData(form);
+
+            fetch('../php/newEmployee.php', {
+              method: 'POST',
+              body: formData
+            })
+              .then(response => response.json())
+              .then(data => {
+                if (data.status === 'success') {
+                  alert(data.message);
+                  form.reset(); // Optionally reset the form
+                  loadEmployees();
+                } else {
+                  alert(data.message || 'Error adding employee.');
+                }
+              })
+              .catch(error => {
+                console.error('Error:', error);
+                alert('An unexpected error occurred.');
+              });
+          });
+        </script>
+
+        <div class="form-card">
+          <h2>Remove Employee</h2>
+          <form id="removeEmployeeForm" action="../php/removeEmployee.php" method="post">
+            <label for="employeeID">Employee ID:</label>
+            <input type="text" id="employeeID" name="employeeID" required>
+
+            <input type="submit" value="Submit">
+          </form>
+        </div>
+      </div>
+
+
+      <script>
+        document.getElementById('removeEmployeeForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          const form = e.target;
+          const formData = new FormData(form);
+
+          fetch('../php/removeEmployee.php', {
+            method: 'POST',
+            body: formData
+          })
+            .then(response => response.json())
+            .then(data => {
+              alert(data.message);
+              if (data.status === 'success') {
+                form.reset();
+                loadEmployees();
+              }
+            })
+            .catch(error => {
+              console.error('Error:', error);
+              alert('An unexpected error occurred.');
+            });
+        });
+      </script>
+
     </div>
-
-    <div class="form-card">
-      <h2>Add Employee</h2>
-      <form action="../php/newEmployee.php" method="post">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required>
-
-        <label for="employeeID">Employee ID:</label>
-        <input type="number" id="employeeID" name="employeeID" required>
-
-        <input type="submit" value="Submit">
-      </form>
-    </div>
-
-    <div class="form-card">
-      <h2>Remove Employee</h2>
-      <form action="../php/removeEmployee.php" method="post">
-        <label for="employeeID">Employee ID:</label>
-        <input type="text" id="employeeID" name="employeeID" required>
-
-        <input type="submit" value="Submit">
-      </form>
-    </div>
-
   </div>
 
   <button class="logout-button" onclick="document.location='Login.html'">LOGOUT</button>
 
 </body>
+
 </html>

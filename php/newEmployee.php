@@ -2,46 +2,49 @@
 include 'template.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve and trim input values
     $name = isset($_POST['name']) ? trim($_POST['name']) : null;
     $employeeID = isset($_POST['employeeID']) ? trim($_POST['employeeID']) : null;
 
-    // Validate input
     if (empty($name) || empty($employeeID)) {
-        die("Error: All fields are required.");
+        echo json_encode(["status" => "error", "message" => "All fields are required."]);
+        exit;
     }
 
     if (!is_numeric($employeeID)) {
-        die("Error: Employee ID must be a valid number.");
+        echo json_encode(["status" => "error", "message" => "Employee ID must be a valid number."]);
+        exit;
     }
 
-    // Check for duplicate EmployeeID
+    // Check for duplicate
     $checkStmt = $conn->prepare("SELECT EmployeeID FROM Employee WHERE EmployeeID = ?");
-    if ($checkStmt === false) {
-        die("Error: Failed to prepare the SQL statement. " . $conn->error);
+    if (!$checkStmt) {
+        echo json_encode(["status" => "error", "message" => "Database error: " . $conn->error]);
+        exit;
     }
     $checkStmt->bind_param("i", $employeeID);
     $checkStmt->execute();
     $checkStmt->store_result();
 
     if ($checkStmt->num_rows > 0) {
-        die("Error: An employee with Employee ID $employeeID already exists.");
+        echo json_encode(["status" => "error", "message" => "An employee with Employee ID $employeeID already exists."]);
+        $checkStmt->close();
+        exit;
     }
     $checkStmt->close();
 
-    // Insert the new employee
+    // Insert employee
     $stmt = $conn->prepare("INSERT INTO Employee (EmployeeID, Name) VALUES (?, ?)");
-    if ($stmt === false) {
-        die("Error: Failed to prepare the SQL statement. " . $conn->error);
+    if (!$stmt) {
+        echo json_encode(["status" => "error", "message" => "Insert failed: " . $conn->error]);
+        exit;
     }
+
     $stmt->bind_param("is", $employeeID, $name);
-
     if ($stmt->execute()) {
-        echo "New employee added successfully!";
+        echo json_encode(["status" => "success", "message" => "Employee added successfully!"]);
     } else {
-        echo "Error: " . $stmt->error;
+        echo json_encode(["status" => "error", "message" => "Insert error: " . $stmt->error]);
     }
-
     $stmt->close();
 }
 
