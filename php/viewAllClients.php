@@ -3,6 +3,10 @@
 session_start();
 include 'template.php';
 
+// Enable error reporting for debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     // Set the number of records per page
     $recordsPerPage = 10;
@@ -29,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $totalPages = ceil($totalCount / $recordsPerPage);
 
     // Prepare the query to get the employees for the current page
-    $sql = "SELECT ClientID, Name, Location FROM Client LIMIT ? OFFSET ?";
+    $sql = "SELECT ClientID, Name, LocationName FROM Client LIMIT ? OFFSET ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bind_param("ii", $recordsPerPage, $offset); // bind parameters for LIMIT and OFFSET
