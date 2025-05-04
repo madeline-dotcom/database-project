@@ -1,3 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'admin') {
+    header("Location: Login.html");
+    exit();
+}
+$username = $_SESSION['username'];
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,41 +89,53 @@
   <div class="header">
     <img src="../images/ant.png" alt="Ant Logo">
     <h1>ANT IT Company</h1>
+    <div class="welcome-message" style="margin-left: auto; font-size: 18px; font-weight: bold; color: #000;">
+    Welcome, <?php echo htmlspecialchars($username); ?>
+    </div>
   </div>
 
   <div class="grid-container">
-    <div class="tile employee" onclick="location.href='EmployeeMng.html'">
+    <div class="tile employee" onclick="location.href='EmployeeMng.php'">
         <img src="../images/employeeMng.png" alt="Employee Mng Icon">
         <div>Employee Management</div>
     </div>   
 
-    <div class="tile client" onclick="location.href='ClientMng.html'">
+    <div class="tile client" onclick="location.href='ClientMng.php'">
         <img src="../images/clientMng.png" alt="Client Mng Icon">
         <div>Client Management</div>
     </div>    
 
-    <div class="tile device" onclick="location.href='DeviceMng.html'">
+    <div class="tile device" onclick="location.href='DeviceMng.php'">
         <img src="../images/devices.png" alt="Devices Icon">
         <div>Devices</div>
     </div>    
 
-    <div class="tile register" onclick="location.href='registerNewUser.html'">
+    <div class="tile register" onclick="location.href='registerNewUser.php'">
       <img src="../images/registerNewUser.png" alt="Register Icon">
       <div>Register New User</div>
     </div>
 
-    <div class="tile submit" onclick="location.href='TicketSubmission.html'">
+    <div class="tile submit" onclick="location.href='TicketSubmission.php'">
       <img src="../images/ticketSubmission.png" alt="Submit Icon">
       <div>Ticket Submission</div>
     </div>
 
-    <div class="tile history" onclick="location.href='TicketHistory.html'">
+    <div class="tile history" onclick="location.href='TicketHistory.php'">
       <img src="../images/ticketHistory.png" alt="Ticket Icon">
       <div>Ticket History</div>
     </div>
   </div>
 
-  <button class="logout-btn" onclick="location.href='Login.html'">LOGOUT</button>
+  <button class="logout-btn" onclick="document.location='../php/logout.php'">LOGOUT</button>
+
+  <script>
+  // Reload page if restored from back/forward cache (after logout)
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
+</script>
 
 </body>
 </html>

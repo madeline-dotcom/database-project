@@ -124,8 +124,16 @@ $conn->close();
         <div class="error"><?php echo $error; ?></div>
     <?php endif; ?>
 
-    <a class="back-button" href="../html/EmployeeMng.html">← Back to Employee Management</a>
+    <a class="back-button" href="../pages/EmployeeMng.php">← Back to Employee Management</a>
 </div>
 
+<script>
+  // Reload page if restored from back/forward cache (after logout)
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
+</script>
 </body>
 </html>

@@ -100,6 +100,23 @@
   </style>
 </head>
 <body>
+  <div id="logout-banner" style="display:none; background-color:#c9abd1; color:#000; padding:15px; text-align:center; font-weight:bold; border-bottom: 1px solid #000;">
+    You have been logged out successfully.
+  </div>  
+
+  <!-- Your existing login form goes here -->
+
+  <script>
+    // Check if ?loggedout=1 is in the URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('loggedout') === '1') {
+      document.getElementById('logout-banner').style.display = 'block';
+  
+      // Remove the parameter from the URL so the message doesn't persist on reload
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  </script>
+  
 
   <div class="top-bar">
     <img src="../images/ant.png" alt="Logo" class="logo">
@@ -109,7 +126,7 @@
   <div class="login-section">
     <div class="login-box">
       <h3>Log In</h3>
-      <form action="../php/login.php" method="post">
+      <form action="../php/login.php" method="post" autocomplete="off">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
 
@@ -121,5 +138,22 @@
     </div>
   </div>
 
+  <script>
+    // If the page was restored from the bfcache (Back/Forward cache), force reload
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    });
+  
+    // Also clear form fields on load
+    window.addEventListener('load', () => {
+      const form = document.querySelector('form');
+      if (form) {
+        form.reset();
+      }
+    });
+  </script>
+  
 </body>
 </html>

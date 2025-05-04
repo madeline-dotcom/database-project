@@ -1,10 +1,9 @@
 <?php
 session_start();
-if (!isset($_SESSION['username'])) {
-    header("Location: Login.html");
+if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'employee') {
+    header("Location: ../pages/Login.html");
     exit();
 }
-$userID = $_SESSION['userID'] ?? '';
 ?>
 <!DOCTYPE html>
 <html>
@@ -152,7 +151,7 @@ $userID = $_SESSION['userID'] ?? '';
     <div class="company-name">ANT IT Company</div>
     <div class="user-info">
         <span>My Tickets</span>
-        <button class="home-button" onclick="document.location='employee.html'">Home</button>
+        <button class="home-button" onclick="document.location='employee.php'">Home</button>
     </div>
 </div>
 
@@ -176,7 +175,16 @@ $userID = $_SESSION['userID'] ?? '';
     </div>
 </div>
 
-<button class="logout-button" onclick="document.location='Login.html'">LOGOUT</button>
+<button class="logout-button" onclick="document.location='../php/logout.php'">LOGOUT</button>
+<script>
+  // Reload page if restored from back/forward cache (after logout)
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
+</script>
+
 
 </body>
 </html>

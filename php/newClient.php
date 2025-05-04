@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $message = "Error: A client with Client ID $clientID already exists.";
                 $isError = true;
             } else {
-                $stmt = $conn->prepare("INSERT INTO Client (ClientID, Name, LocationName) VALUES (?, ?, ?)");
+                $stmt = $conn->prepare("INSERT INTO Client (ClientID, Name, Location) VALUES (?, ?, ?)");
                 if ($stmt === false) {
                     $message = "Prepare failed: " . $conn->error;
                     $isError = true;
@@ -125,8 +125,17 @@ $conn->close();
 
 <div class="container">
     <div class="message"><?= htmlspecialchars($message) ?></div>
-    <a href="../html/ClientMng.html" class="back-button">← Back to Client Management</a>
+    <a href="../pages/ClientMng.php" class="back-button">← Back to Client Management</a>
 </div>
+
+<script>
+  // Reload page if restored from back/forward cache (after logout)
+  window.addEventListener('pageshow', function (event) {
+    if (event.persisted) {
+      window.location.reload();
+    }
+  });
+</script>
 
 </body>
 </html>

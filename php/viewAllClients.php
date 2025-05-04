@@ -5,7 +5,7 @@ require_once 'template.php'; // Includes the database connection
 $clients = [];
 $error = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['userType'])) {
-    $sql = "SELECT ClientID, Name, LocationName FROM Client";
+    $sql = "SELECT ClientID, Name, Location FROM Client";
     $stmt = $conn->prepare($sql);
     if ($stmt && $stmt->execute()) {
         $result = $stmt->get_result();
@@ -130,14 +130,15 @@ $conn->close();
                 <tr>
                     <td><?= htmlspecialchars($client['ClientID']) ?></td>
                     <td><?= htmlspecialchars($client['Name'] ?? '') ?></td>
-                    <td><?= htmlspecialchars($client['LocationName'] ?? '') ?></td>
+                    <td><?= htmlspecialchars($client['Location'] ?? '') ?></td>
                 </tr>
             <?php endforeach; ?>
         </table>
     <?php endif; ?>
 
-    <a class="back-button" href="../html/ClientMng.html">← Back to Client Management</a>
+    <a class="back-button" href="../pages/ClientMng.php">← Back to Client Management</a>
 </div>
+
 
 </body>
 </html>

@@ -114,7 +114,7 @@ require_once 'template.php';
     <div class="company-name">ANT IT Company</div>
     <div class="user-info">
       <span>Employee List</span>
-      <button class="back-button" onclick="document.location='../html/EmployeeMng.html'">Back</button>
+      <button class="back-button" onclick="document.location='../pages/EmployeeMng.php'">Back</button>
     </div>
 </div>
 
@@ -150,8 +150,6 @@ require_once 'template.php';
     }
     ?>
 </div>
-
-<button class="logout-button" onclick="location.href='Login.html'">LOGOUT</button>
 
 </body>
 </html>

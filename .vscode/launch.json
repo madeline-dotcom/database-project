@@ -7,8 +7,8 @@
         {
             "type": "chrome",
             "request": "launch",
-            "name": "Open registerNewUser.html",
-            "file": "/Users/dianamartinez/database-project/html/registerNewUser.html"
+            "name": "Open registerNewUser.php",
+            "file": "/Users/dianamartinez/database-project/pages/registerNewUser.php"
         }
     ]
 }
