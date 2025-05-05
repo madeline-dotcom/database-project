@@ -1,11 +1,44 @@
 <?php
 session_start();
-// Ensure the user is an admin, or redirect them to the login page
+// Ensure the user is a client
 if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'client') {
     header("Location: ../pages/Login.html");
     exit();
 }
+$clientID = $_SESSION['clientID'] ?? null;
+
+require_once '../php/template.php';
+
+$message = "";
+$error = "";
+$rows = [];
+
+if ($clientID) {
+    $sql = "SELECT TicketNum, DeviceType, Status FROM Ticket WHERE ClientID = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $clientID);
+
+    if ($stmt->execute()) {
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $rows[] = $row;
+            }
+        } else {
+            $error = "No tickets found for your account.";
+        }
+    } else {
+        $error = "Error retrieving tickets.";
+    }
+
+    $stmt->close();
+} else {
+    $error = "Client ID not found. Please log in again.";
+}
+
+$conn->close();
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -126,12 +159,48 @@ if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'clie
       background-color: #b89bc3;
     }
 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #000;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: center;
+      color: #000;
+    }
+
+    th {
+      background-color: #a4d3f4;
+    }
+
+    .message {
+      text-align: center;
+      padding: 15px;
+      border-radius: 6px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .message.error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+
     @media (max-width: 1100px) {
       .ticket-card {
         width: 90%;
       }
     }
   </style>
+
 </head>
 <body>
 
@@ -145,12 +214,28 @@ if (!isset($_SESSION['usertype']) || strtolower($_SESSION['usertype']) !== 'clie
 </div>
 
 <div class="ticket-card">
-  <h2>Search My Tickets</h2>
-  <form action="../php/processTicketsClient.php" method="post">
-    <label for="clientID">Client ID:</label>
-    <input type="text" id="clientID" name="clientID" required>
-    <input type="submit" value="Search">
-  </form>
+  <h2>My Tickets</h2>
+
+  <?php if (!empty($error)): ?>
+    <div class="message error"><?= htmlspecialchars($error) ?></div>
+  <?php elseif (!empty($rows)): ?>
+    <table>
+      <tr>
+        <th>Ticket Number</th>
+        <th>Device Type</th>
+        <th>Status</th>
+      </tr>
+      <?php foreach ($rows as $row): ?>
+        <tr>
+          <td><?= htmlspecialchars($row['TicketNum']) ?></td>
+          <td><?= htmlspecialchars($row['DeviceType']) ?></td>
+          <td><?= htmlspecialchars($row['Status']) ?></td>
+        </tr>
+      <?php endforeach; ?>
+    </table>
+  <?php else: ?>
+    <div class="message">No tickets to display.</div>
+  <?php endif; ?>
 </div>
 
 <button class="logout-button" onclick="document.location='../php/logout.php'">LOGOUT</button>
