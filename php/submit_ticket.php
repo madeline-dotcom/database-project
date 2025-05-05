@@ -8,10 +8,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $deviceType = isset($_POST['deviceType']) ? trim($_POST['deviceType']) : null;
     $serialNum = isset($_POST['serialNum']) ? trim($_POST['serialNum']) : null;
     $clientID = isset($_POST['clientID']) ? trim($_POST['clientID']) : null;
+    $purchaseDate = isset($_POST['purchaseDate']) ? trim($_POST['purchaseDate']) : null;
     $employeeID = null;
     $status = "Open";
 
-    if (empty($ticketNum) || empty($deviceType) || empty($serialNum) || empty($clientID)) {
+    if (empty($ticketNum) || empty($deviceType) || empty($serialNum) || empty($clientID) || empty($purchaseDate)) {
         $message = "Error: All fields are required.";
     } elseif (!is_numeric($ticketNum) || !is_numeric($serialNum) || !is_numeric($clientID)) {
         $message = "Error: All fields must be valid numbers.";
@@ -23,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $checkStmt->bind_param("i", $ticketNum);
             $checkStmt->execute();
             $checkStmt->store_result();
-
+            //Insert the ticket if it doesn't exist
             if ($checkStmt->num_rows > 0) {
                 $message = "Error: A ticket with Ticket Number $ticketNum already exists.";
             } else {
@@ -42,6 +43,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
             $checkStmt->close();
+            //Insert device into the Device table
+            $deviceStmt = $conn->prepare("INSERT INTO Device (SerialNum, DeviceType, PurchasedDate, ClientID, TicketNum) VALUES (?, ?, ?, ?, ?)");
+            if (!$deviceStmt) {
+                $message = "Error: " . $conn->error;
+            } else {
+                $deviceStmt->bind_param("ssssi", $serialNum, $deviceType, $purchaseDate, $clientID, $ticketNum);
+                if (!$deviceStmt->execute()) {
+                    $message = "Error: " . $deviceStmt->error;
+                }
+                $deviceStmt->close();
+            }
         }
     }
     $conn->close();

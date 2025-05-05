@@ -40,6 +40,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
                 $stmt->close();
             }
+            //update last worked on date in device table
+            $deviceStmt = $conn->prepare("UPDATE Device SET LastWorkedOn = NOW() WHERE TicketNum = ?");
+            if ($deviceStmt === false) {
+                $error = "Prepare failed: " . $conn->error;
+            } else {
+                $deviceStmt->bind_param("i", $ticketNum);
+                if (!$deviceStmt->execute()) {
+                    $error = "Error updating device: " . $deviceStmt->error;
+                }
+                $deviceStmt->close();
+            }
         }
     }
 
