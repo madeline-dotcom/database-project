@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $totalPages = ceil($totalCount / $recordsPerPage);
 
     // Prepare the query to get the employees for the current page
-    $sql = "SELECT ClientID, Name, Location FROM Client LIMIT ? OFFSET ?";
+    $sql = "SELECT ClientID, Name, LocationName FROM Client LIMIT ? OFFSET ?";
     $stmt = $conn->prepare($sql);
     if ($stmt) {
         $stmt->bind_param("ii", $recordsPerPage, $offset); // bind parameters for LIMIT and OFFSET
